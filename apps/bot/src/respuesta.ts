@@ -1,4 +1,4 @@
-import type { RespuestaIA } from '@fi/ai';
+import type { FragmentoContexto, RespuestaIA } from '@fi/ai';
 
 /** Tope conservador: WhatsApp corta en 4096 y Telegram también. */
 const LIMITE_MENSAJE = 4_000;
@@ -22,6 +22,22 @@ export function formatearRespuesta(respuesta: RespuestaIA): string {
       : respuesta.texto;
 
   return texto + pie;
+}
+
+/** Los PDFs adjuntos, sin repetir el mismo archivo si vinieron varios tramos. */
+export function archivosDeContexto(
+  documentos: FragmentoContexto[],
+): NonNullable<FragmentoContexto['archivo']>[] {
+  const vistos = new Set<string>();
+  const archivos: NonNullable<FragmentoContexto['archivo']>[] = [];
+
+  for (const documento of documentos) {
+    if (!documento.archivo || vistos.has(documento.archivo.ruta)) continue;
+    vistos.add(documento.archivo.ruta);
+    archivos.push(documento.archivo);
+  }
+
+  return archivos;
 }
 
 export const MENSAJE_ERROR =

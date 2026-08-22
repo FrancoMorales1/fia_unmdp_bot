@@ -4,6 +4,7 @@ import {
   construirPrompt,
   construirPromptDeMateria,
   extraerFuentes,
+  instruccionParaOpcion,
   MAX_CARACTERES_POR_DOCUMENTO,
 } from './prompt.js';
 
@@ -68,6 +69,12 @@ describe('extraerFuentes', () => {
     ]);
 
     expect(fuentes).toEqual(['https://fi.mdp.edu.ar/x', 'https://fi.mdp.edu.ar/y']);
+  });
+});
+
+describe('instruccionParaOpcion', () => {
+  it('le dice al modelo que un tramo no es el documento entero', () => {
+    expect(instruccionParaOpcion(2)).toContain('(tramo N/M)');
   });
 });
 

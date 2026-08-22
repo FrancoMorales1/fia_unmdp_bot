@@ -37,4 +37,9 @@ export interface ProveedorIA {
    * más probable a la menos, o una lista vacía si ninguna corresponde.
    */
   identificarMaterias(consulta: ConsultaDeMateria): Promise<string[]>;
+  /**
+   * Embedding de la consulta del alumno (taskType RETRIEVAL_QUERY).
+   * Si falla, el bot sigue con FTS: el RAG degrada, no se cae.
+   */
+  embeber(textos: string[]): Promise<number[][]>;
 }

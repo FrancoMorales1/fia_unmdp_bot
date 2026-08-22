@@ -1,6 +1,7 @@
 import { AiError, createLogger, env } from '@fi/core';
 import { GoogleGenAI, Type } from '@google/genai';
 
+import { EMBEDDING_DIMENSIONES, extraerVectores } from './embeddings.js';
 import {
   construirPrompt,
   construirPromptDeMateria,
@@ -100,6 +101,37 @@ export function crearProveedorGemini(
       } catch (error) {
         if (error instanceof AiError) throw error;
         throw new AiError('Falló la identificación de la materia', error);
+      }
+    },
+
+    async embeber(textos: string[]): Promise<number[][]> {
+      if (textos.length === 0) return [];
+
+      try {
+        const respuesta = await cliente.models.embedContent({
+          model: env.GEMINI_EMBEDDING_MODEL,
+          contents: textos,
+          config: {
+            outputDimensionality: EMBEDDING_DIMENSIONES,
+            taskType: 'RETRIEVAL_QUERY',
+          },
+        });
+
+        const vectores = extraerVectores(respuesta);
+        if (vectores.length !== textos.length) {
+          throw new AiError(
+            `Gemini devolvió ${String(vectores.length)} embeddings para ${String(textos.length)} textos`,
+          );
+        }
+
+        log.debug(
+          { modelo: env.GEMINI_EMBEDDING_MODEL, textos: textos.length },
+          'Embeddings generados',
+        );
+        return vectores;
+      } catch (error) {
+        if (error instanceof AiError) throw error;
+        throw new AiError('Falló el embedding de la consulta', error);
       }
     },
   };

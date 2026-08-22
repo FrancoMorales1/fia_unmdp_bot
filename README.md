@@ -9,14 +9,17 @@ Los horarios salen del sistema de reserva de salas de la Facultad
 diario a las 4am trae los próximos 7 días y los deja en Postgres. Al calendario
 académico, los planes de estudio y la información de la facultad los carga
 `scripts/seed-material.mjs` desde `material/`. Cuando un alumno pregunta, el bot
-busca en esa base, arma el contexto y se lo pasa a Gemini.
+busca en esa base (RAG: tramos + FTS + embeddings), arma el contexto y se lo
+pasa a Gemini.
 
 ```
-WhatsApp ─┐                ┌──▶ contexto (horarios y material en Postgres)
+WhatsApp ─┐                ┌──▶ horarios (catálogo → SQL)
           ├──▶ @fi/bot ────┤
-Telegram ─┘                └──▶ @fi/ai ──▶ Gemini ──▶ respuesta ──▶ canal
+Telegram ─┘                ├──▶ material (RAG: FTS + embeddings sobre tramos)
+                           └──▶ @fi/ai ──▶ Gemini ──▶ respuesta ──▶ canal
 
 @fi/queue (cron 4am) ──▶ @fi/scrapper ──▶ MRBS ──▶ Postgres
+seed-material            ──▶ material + material_chunks (+ embeddings)
 ```
 
 > **Alcance actual.** El bot responde sobre las cuatro opciones del menú:
@@ -58,10 +61,17 @@ SCRAPPER_AL_INICIAR=true pnpm dev   # scrapea al toque y muestra el QR
 Sin `SCRAPPER_AL_INICIAR` la base arranca vacía y el bot no sabe ningún horario
 hasta las 4am.
 
-`pnpm db:migrate` corre la migración `0002_busqueda_sin_acentos`, que crea las
-extensiones `unaccent` y `pg_trgm`. Eso pide un rol con permiso de
-`CREATE EXTENSION` (el `fi` del docker-compose lo tiene; en un Postgres
-gestionado hay que habilitarlas desde el panel).
+`pnpm db:migrate` corre `0002_busqueda_sin_acentos` (`unaccent` + `pg_trgm`) y
+`0003_material_chunks_rag` (`vector` / pgvector). Eso pide un rol con permiso
+de `CREATE EXTENSION` (el `fi` del docker-compose lo tiene; en un Postgres
+gestionado hay que habilitar `unaccent`, `pg_trgm` y `vector` desde el panel).
+
+El compose usa `pgvector/pgvector:pg17`. Si ya tenías el volumen de
+`postgres:17-alpine`, recrealo: `docker compose down -v && pnpm services:up`.
+
+Después de migrar, volvé a correr `pnpm db:seed-material` para trocear los PDFs
+y (si hay `GEMINI_API_KEY`) calcular embeddings. Sin key el bot busca igual,
+solo con FTS sobre los tramos.
 
 Para responder por Telegram hace falta `TELEGRAM_BOT_TOKEN` (lo da @BotFather).
 Sin token el bot arranca igual y responde solo por WhatsApp.
@@ -142,12 +152,24 @@ materia tal cual no dependa de que la IA acierte. Y si tampoco eso encuentra,
 el fragmento sale marcado `SIN COINCIDENCIAS` con el catálogo entero, así la
 respuesta final puede sugerir lo más parecido en vez de cortar la conversación.
 
-### Material: cascada de texto
+### Material: RAG híbrido sobre tramos
 
-El calendario, los planes y la info de la facultad siguen por búsqueda de texto:
-todas las palabras (`plainto_tsquery`), después alguna palabra (`to_tsquery` con
-OR, ordenado por `ts_rank`), y si no hay nada, `SIN COINCIDENCIAS` con los
-títulos disponibles.
+El calendario, los planes y la info de la facultad no van enteros al modelo.
+`seed-material` parte cada documento en tramos (`material_chunks`) y, si hay
+API key, les calcula un embedding con Gemini.
+
+Cuando el alumno pregunta:
+
+1. **FTS** sobre el tramo (`plainto_tsquery`, después OR), igual que antes.
+2. **k-NN** por cosine (`embedding <=> consulta`) si ese tramo tiene vector.
+3. **RRF** junta las dos listas y se quedan los 5 mejores tramos.
+
+Así "cuándo me anoto a finales" puede caer en el párrafo de mesas aunque no
+comparta esas palabras. Si el embedding falla o el seed corrió sin key, queda
+solo el FTS: el bot no se cae.
+
+Los horarios **no** se vectorizan: día, hora y aula son filas, no prosa. El
+paso 1 del modelo eligiendo del catálogo sigue siendo el retrieval correcto.
 
 Todo corre sobre `espanol_sin_acentos` (`spanish` + `unaccent`). El diccionario
 `spanish` pelado stemea pero no normaliza acentos, y MRBS guarda los títulos
@@ -266,9 +288,5 @@ ya está en `material/`. Lo que falta agregar a esa carpeta antes del próximo s
 - WhatsApp no tiene botones: ahí el menú sigue siendo la lista numerada de
   siempre (`1 análisis matemático`). La estructura de opciones es la misma que
   en Telegram, solo cambia cómo se dibuja.
-- `seed-material.mjs` guarda cada PDF entero en una fila de `material`, sin
-  trocear. Se busca y se manda el documento completo, y lo que no entra en la
-  ventana del modelo se corta por el final. Falta chunkear por sección para que
-  la búsqueda devuelva el pedazo relevante en vez del documento entero.
 - El deploy en el servidor definitivo de la Facultad está pendiente; la imagen
   Docker se publica en GHCR pero no hay pipeline de deploy automático.

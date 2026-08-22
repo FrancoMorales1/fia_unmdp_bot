@@ -1,4 +1,5 @@
 export { crearProveedorGemini } from './gemini.js';
+export { extraerVectores, EMBEDDING_DIMENSIONES } from './embeddings.js';
 export {
   construirPrompt,
   construirPromptDeMateria,

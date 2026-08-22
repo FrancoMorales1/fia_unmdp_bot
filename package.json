@@ -26,7 +26,7 @@
     "clean": "tsc -b --clean && rimraf \"{apps,packages}/*/dist\" \"{apps,packages}/*/*.tsbuildinfo\" coverage",
     "db:generate": "pnpm --filter @fi/db generate",
     "db:migrate": "pnpm --filter @fi/db migrate",
-    "db:seed-material": "node scripts/seed-material.mjs",
+    "db:seed-material": "node --experimental-strip-types scripts/seed-material.mjs",
     "db:studio": "pnpm --filter @fi/db studio",
     "services:up": "docker compose up -d",
     "services:down": "docker compose down"

@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import type { RespuestaIA } from '@fi/ai';
 
-import { formatearRespuesta } from './respuesta.js';
+import { archivosDeContexto, formatearRespuesta } from './respuesta.js';
 
 function respuesta(parcial: Partial<RespuestaIA> = {}): RespuestaIA {
   return { texto: 'Las inscripciones abren en marzo.', fuentes: [], modelo: 'test', ...parcial };
@@ -42,5 +42,19 @@ describe('formatearRespuesta', () => {
 
     expect(salida.length).toBeLessThanOrEqual(4000);
     expect(salida).toContain('_Fuentes:_');
+  });
+});
+
+describe('archivosDeContexto', () => {
+  it('deduplica el mismo PDF que aparece en varios tramos', () => {
+    const archivo = { ruta: '/material/calendario.pdf', nombre: 'calendario.pdf' };
+
+    expect(
+      archivosDeContexto([
+        { titulo: 'tramo 1', url: 'https://fi.mdp.edu.ar/', contenido: 'a', archivo },
+        { titulo: 'tramo 2', url: 'https://fi.mdp.edu.ar/', contenido: 'b', archivo },
+        { titulo: 'enlace', url: 'https://fi.mdp.edu.ar/', contenido: 'c' },
+      ]),
+    ).toEqual([archivo]);
   });
 });

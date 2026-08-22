@@ -30,7 +30,7 @@ import {
   planElegido,
   pedidoDeConsulta,
 } from './menu.js';
-import { formatearRespuesta, MENSAJE_ERROR } from './respuesta.js';
+import { archivosDeContexto, formatearRespuesta, MENSAJE_ERROR } from './respuesta.js';
 import { iniciarScraping } from './scraping.js';
 import {
   olvidarMaterias,
@@ -113,7 +113,7 @@ async function responder(mensaje: MensajeEntrante): Promise<Salida> {
       if (!Array.isArray(documentos)) return MENSAJE_ERROR;
       return {
         texto: 'Acá tenés el calendario académico 2026.',
-        archivos: documentos.flatMap((documento) => (documento.archivo ? [documento.archivo] : [])),
+        archivos: archivosDeContexto(documentos),
         opciones: botonesDeSeguimiento(),
         opcionesSoloEnBotones: true,
       };
@@ -139,10 +139,12 @@ async function responder(mensaje: MensajeEntrante): Promise<Salida> {
   olvidarCarreras(mensaje.jid);
   olvidarPlanes(mensaje.jid);
 
-  if (intencion.numero === 2 || intencion.numero === 3) {
+  if (plan) {
     return {
-      texto: '¿Sobre qué querés consultar ahora?',
-      archivos: documentos.flatMap((documento) => (documento.archivo ? [documento.archivo] : [])),
+      texto:
+        `Acá tenés el plan de estudios. Si querés, preguntame por una materia, ` +
+        'correlativa o requisito.',
+      archivos: archivosDeContexto(documentos),
       opciones: botonesDeSeguimiento(),
     };
   }
@@ -160,6 +162,7 @@ async function responder(mensaje: MensajeEntrante): Promise<Salida> {
 
   return {
     texto: formatearRespuesta(respuesta),
+    archivos: archivosDeContexto(documentos),
     // Botones para saltar a otro tema sin volver al menú. En WhatsApp no se
     // muestran: repetir el menú entero abajo de cada respuesta es ruido.
     opciones: botonesDeSeguimiento(),

@@ -237,6 +237,71 @@ for (const [carrera, anioViejo, tokenViejo, tokenNuevo] of PLANES_REMOTOS) {
 }
 console.log(`   → ${planesLeidos} planes`);
 
+// ── RAG: trocear + embeddings ─────────────────────────────────────────────────
+
+const { trocearDocumento } = await import('../packages/db/src/chunking.ts');
+
+const EMBEDDING_DIMENSIONES = 768;
+const EMBEDDING_LOTE = 20;
+
+function literalDeVector(valores) {
+  if (!Array.isArray(valores) || valores.length !== EMBEDDING_DIMENSIONES) {
+    throw new Error(`Embedding inválido (${valores?.length ?? 0} dims)`);
+  }
+  return `[${valores.join(',')}]`;
+}
+
+async function embeberDocumentos(textos, apiKey, modelo) {
+  const vectores = [];
+
+  for (let i = 0; i < textos.length; i += EMBEDDING_LOTE) {
+    const lote = textos.slice(i, i + EMBEDDING_LOTE);
+    const respuesta = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/${modelo}:batchEmbedContents?key=${apiKey}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          requests: lote.map((texto) => ({
+            model: `models/${modelo}`,
+            content: { parts: [{ text: texto }] },
+            taskType: 'RETRIEVAL_DOCUMENT',
+            outputDimensionality: EMBEDDING_DIMENSIONES,
+          })),
+        }),
+      },
+    );
+
+    if (!respuesta.ok) {
+      throw new Error(`Embeddings HTTP ${respuesta.status}: ${await respuesta.text()}`);
+    }
+
+    const json = await respuesta.json();
+    const loteVectores = (json.embeddings ?? []).map((e) => e.values);
+    if (loteVectores.length !== lote.length) {
+      throw new Error(
+        `Gemini devolvió ${loteVectores.length} embeddings para ${lote.length} textos`,
+      );
+    }
+    vectores.push(...loteVectores);
+    console.log(`   → embeddings ${Math.min(i + lote.length, textos.length)}/${textos.length}`);
+  }
+
+  return vectores;
+}
+
+async function insertarTramos(client, materialId, titulo, contenido) {
+  const tramos = trocearDocumento(titulo, contenido);
+  for (const tramo of tramos) {
+    await client.query(
+      `INSERT INTO material_chunks (material_id, indice, titulo, contenido)
+       VALUES ($1, $2, $3, $4)`,
+      [materialId, tramo.indice, tramo.titulo, tramo.contenido],
+    );
+  }
+  return tramos.length;
+}
+
 // ── Persistir ─────────────────────────────────────────────────────────────────
 
 const { Pool } = pg;
@@ -247,27 +312,78 @@ try {
   try {
     await client.query('BEGIN');
 
-    // Borrar solo filas cargadas por el script (las manuales tienen fuente NULL)
+    // Borrar solo filas cargadas por el script (las manuales tienen fuente NULL).
+    // Los tramos se van con ON DELETE CASCADE.
     const { rowCount: borradas } = await client.query(
       'DELETE FROM material WHERE fuente IS NOT NULL',
     );
     console.log(`\n🗑  ${borradas ?? 0} filas anteriores eliminadas`);
 
+    let tramosInsertados = 0;
     for (const fila of filas) {
-      await client.query(
+      const insertado = await client.query(
         `INSERT INTO material (categoria, subcategoria, titulo, contenido, fuente)
-         VALUES ($1, $2, $3, $4, $5)`,
+         VALUES ($1, $2, $3, $4, $5)
+         RETURNING id`,
         [fila.categoria, fila.subcategoria, fila.titulo, fila.contenido, fila.fuente],
+      );
+      tramosInsertados += await insertarTramos(
+        client,
+        insertado.rows[0].id,
+        fila.titulo,
+        fila.contenido,
       );
     }
 
+    const huérfanos = await client.query(
+      `SELECT id, titulo, contenido FROM material m
+       WHERE NOT EXISTS (SELECT 1 FROM material_chunks c WHERE c.material_id = m.id)`,
+    );
+    for (const fila of huérfanos.rows) {
+      tramosInsertados += await insertarTramos(client, fila.id, fila.titulo, fila.contenido);
+    }
+
     await client.query('COMMIT');
-    console.log(`✅ ${filas.length} filas insertadas correctamente`);
+    console.log(`✅ ${filas.length} documentos y ${tramosInsertados} tramos insertados`);
   } catch (err) {
     await client.query('ROLLBACK');
     throw err;
   } finally {
     client.release();
+  }
+
+  const apiKey = process.env.GEMINI_API_KEY;
+  const modelo = process.env.GEMINI_EMBEDDING_MODEL || 'gemini-embedding-001';
+  if (!apiKey) {
+    console.log('ℹ️  GEMINI_API_KEY ausente: tramos sin embedding (la búsqueda usa solo FTS).');
+  } else {
+    const pendientes = await pool.query(
+      `SELECT id, titulo, contenido FROM material_chunks WHERE embedding IS NULL ORDER BY id`,
+    );
+    if (pendientes.rows.length === 0) {
+      console.log('ℹ️  No hay tramos pendientes de embedding.');
+    } else {
+      console.log(`\n🔢 Calculando embeddings de ${pendientes.rows.length} tramos...`);
+      const textos = pendientes.rows.map((fila) => `${fila.titulo}\n${fila.contenido}`);
+      const vectores = await embeberDocumentos(textos, apiKey, modelo);
+      const client = await pool.connect();
+      try {
+        await client.query('BEGIN');
+        for (let i = 0; i < pendientes.rows.length; i++) {
+          await client.query(`UPDATE material_chunks SET embedding = $1::vector WHERE id = $2`, [
+            literalDeVector(vectores[i]),
+            pendientes.rows[i].id,
+          ]);
+        }
+        await client.query('COMMIT');
+        console.log(`✅ ${pendientes.rows.length} embeddings guardados`);
+      } catch (err) {
+        await client.query('ROLLBACK');
+        throw err;
+      } finally {
+        client.release();
+      }
+    }
   }
 } finally {
   await pool.end();

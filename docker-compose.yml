@@ -2,7 +2,9 @@ name: fi-bot
 
 services:
   postgres:
-    image: postgres:17-alpine
+    # pgvector: hace falta para el RAG (columna vector + índice HNSW).
+    # Si ya tenías el volumen de postgres:17-alpine, recrealo: docker compose down -v
+    image: pgvector/pgvector:pg17
     restart: unless-stopped
     environment:
       POSTGRES_USER: fi
@@ -24,6 +26,8 @@ services:
     environment:
       DATABASE_URL: postgres://fi:fi@postgres:5432/fi_bot
       CI: 'true'
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      GEMINI_EMBEDDING_MODEL: ${GEMINI_EMBEDDING_MODEL:-gemini-embedding-001}
     volumes:
       - .:/workspace
     depends_on:

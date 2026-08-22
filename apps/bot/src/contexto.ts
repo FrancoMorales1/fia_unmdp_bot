@@ -1,7 +1,15 @@
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { db, FTS, tsqueryOr } from '@fi/db';
+import {
+  db,
+  FTS,
+  fusionarPorRRF,
+  origenDeHallazgo,
+  tituloDeHallazgo,
+  tsqueryOr,
+  vectorALiteral,
+} from '@fi/db';
 import { fechaEnZona, nombreDiaSemana, sumarDias } from '@fi/scrapper';
 import { sql } from 'drizzle-orm';
 
@@ -24,7 +32,8 @@ const MAX_CLASES_AGENDA = 200;
  * Recortarlo sería volver a esconderle materias que sí se dictan.
  */
 const MAX_MATERIAS_CATALOGO = 1_000;
-const MAX_FRAGMENTOS_MATERIAL = 3;
+const MAX_FRAGMENTOS_MATERIAL = 5;
+const MAX_CANDIDATOS_RAG = 8;
 const MAX_TITULOS_MATERIAL = 50;
 
 function normalizarTexto(texto: string): string {
@@ -292,12 +301,9 @@ interface FilaMaterial extends Record<string, unknown> {
 const TEXTO_MATERIAL = sql`(titulo || ' ' || contenido)`;
 
 /**
- * El material se guarda un PDF entero por fila (el calendario académico son
- * decenas de miles de caracteres). No se recorta acá a propósito: el único
- * corte lo hace `construirPrompt` con el límite del modelo. Cortando en los dos
- * lados el de acá ganaba —eran 3.000 caracteres, o sea la primera página del
- * calendario— y el bot decía "no tengo esa información" sobre cualquier fecha
- * que cayera más adelante.
+ * El documento padre (un PDF entero) solo se usa cuando no hay consulta —el
+ * alumno mandó "-" y quiere el archivo— o como fallback si todavía no se
+ * indexaron tramos. Con una pregunta se buscan `material_chunks`.
  */
 function aFragmento(fila: FilaMaterial): FragmentoContexto {
   const esArchivoAdjunto = fila.categoria === 'plan_estudios' || fila.categoria === 'calendario';
@@ -320,14 +326,128 @@ function aFragmento(fila: FilaMaterial): FragmentoContexto {
   };
 }
 
+interface FilaChunk extends Record<string, unknown> {
+  id: string;
+  titulo: string;
+  contenido: string;
+  categoria: string;
+  fuente: string | null;
+}
+
+function aFragmentoChunk(fila: FilaChunk, titulo: string): FragmentoContexto {
+  const esArchivoAdjunto = fila.categoria === 'plan_estudios' || fila.categoria === 'calendario';
+
+  return {
+    titulo,
+    url: FUENTE_FACULTAD,
+    contenido: fila.contenido,
+    ...(esArchivoAdjunto && fila.fuente
+      ? {
+          archivo: {
+            ruta: resolve(
+              fileURLToPath(new URL('../../../material/', import.meta.url)),
+              fila.fuente,
+            ),
+            nombre: fila.fuente,
+          },
+        }
+      : {}),
+  };
+}
+
+async function hayTramos(categorias: string[]): Promise<boolean> {
+  const { rows } = await db.execute<{ total: string }>(sql`
+    SELECT count(*)::text AS total
+    FROM material_chunks c
+    JOIN material m ON m.id = c.material_id
+    WHERE m.categoria = ANY(${arregloTexto(categorias)})
+  `);
+  return Number(rows[0]?.total ?? 0) > 0;
+}
+
+async function buscarChunksFts(
+  categorias: string[],
+  consulta: string,
+  modo: 'exacto' | 'parcial',
+): Promise<FilaChunk[]> {
+  const texto = sql`(c.titulo || ' ' || c.contenido)`;
+
+  if (modo === 'exacto') {
+    const { rows } = await db.execute<FilaChunk>(sql`
+      SELECT c.id, c.titulo, c.contenido, m.categoria, m.fuente
+      FROM material_chunks c
+      JOIN material m ON m.id = c.material_id
+      WHERE m.categoria = ANY(${arregloTexto(categorias)})
+        AND to_tsvector(${FTS}, ${texto}) @@ plainto_tsquery(${FTS}, ${consulta})
+      ORDER BY ts_rank(to_tsvector(${FTS}, ${texto}), plainto_tsquery(${FTS}, ${consulta})) DESC
+      LIMIT ${MAX_CANDIDATOS_RAG}
+    `);
+    return rows;
+  }
+
+  const tsq = tsqueryOr(consulta);
+  if (!tsq) return [];
+
+  const { rows } = await db.execute<FilaChunk>(sql`
+    SELECT c.id, c.titulo, c.contenido, m.categoria, m.fuente
+    FROM material_chunks c
+    JOIN material m ON m.id = c.material_id
+    WHERE m.categoria = ANY(${arregloTexto(categorias)})
+      AND to_tsvector(${FTS}, ${texto}) @@ to_tsquery(${FTS}, ${tsq})
+    ORDER BY ts_rank(to_tsvector(${FTS}, ${texto}), to_tsquery(${FTS}, ${tsq})) DESC
+    LIMIT ${MAX_CANDIDATOS_RAG}
+  `);
+  return rows;
+}
+
+async function buscarChunksVector(categorias: string[], embedding: number[]): Promise<FilaChunk[]> {
+  const literal = vectorALiteral(embedding);
+  const { rows } = await db.execute<FilaChunk>(sql`
+    SELECT c.id, c.titulo, c.contenido, m.categoria, m.fuente
+    FROM material_chunks c
+    JOIN material m ON m.id = c.material_id
+    WHERE m.categoria = ANY(${arregloTexto(categorias)})
+      AND c.embedding IS NOT NULL
+    ORDER BY c.embedding <=> ${literal}::vector
+    LIMIT ${MAX_CANDIDATOS_RAG}
+  `);
+  return rows;
+}
+
+async function embeddingDeConsulta(
+  consulta: string,
+  ia: ProveedorIA,
+): Promise<number[] | undefined> {
+  try {
+    const [vector] = await ia.embeber([consulta]);
+    return vector;
+  } catch {
+    return undefined;
+  }
+}
+
+function sinCoincidenciasMaterial(consulta: string, titulos: string[]): FragmentoContexto[] {
+  return [
+    {
+      titulo: tituloDeHallazgo('', 'ninguno', consulta),
+      url: FUENTE_FACULTAD,
+      contenido:
+        `No hay nada sobre "${consulta}" en esta parte de la base de conocimiento. Los ` +
+        'documentos disponibles son estos; si alguno cubre lo que preguntó el alumno, ' +
+        'ofrecéselo, y si no, decile que ese dato todavía no está cargado.\n\n' +
+        titulos.map((titulo) => `- ${titulo}`).join('\n'),
+    },
+  ];
+}
+
 /**
- * Mismo esquema que los horarios: exacto → parcial → aviso explícito.
- * El material sale de PDFs llenos de acentos, así que arrastraba el mismo
- * problema de `to_tsvector('spanish', …)` que las cursadas.
+ * RAG del material: FTS sobre tramos + k-NN de embeddings, fusionados con RRF.
+ * Si todavía no hay tramos (seed viejo), cae a la búsqueda por documento entero.
  */
 async function buscarEnMaterial(
   categorias: string[],
   consulta: string,
+  ia: ProveedorIA,
 ): Promise<FragmentoContexto[]> {
   if (consulta.length === 0) {
     const { rows } = await db.execute<FilaMaterial>(sql`
@@ -336,6 +456,46 @@ async function buscarEnMaterial(
       LIMIT ${MAX_FRAGMENTOS_MATERIAL}
     `);
     return rows.map(aFragmento);
+  }
+
+  if (await hayTramos(categorias)) {
+    const exactas = await buscarChunksFts(categorias, consulta, 'exacto');
+    const parciales =
+      exactas.length > 0 ? [] : await buscarChunksFts(categorias, consulta, 'parcial');
+    const embedding = await embeddingDeConsulta(consulta, ia);
+    const semanticos = embedding ? await buscarChunksVector(categorias, embedding) : [];
+
+    const ids = fusionarPorRRF(
+      [exactas.map((f) => f.id), parciales.map((f) => f.id), semanticos.map((f) => f.id)],
+      MAX_FRAGMENTOS_MATERIAL,
+    );
+    const porId = new Map([...exactas, ...parciales, ...semanticos].map((fila) => [fila.id, fila]));
+    const idsExactos = new Set(exactas.map((f) => f.id));
+    const idsParciales = new Set(parciales.map((f) => f.id));
+    const idsSemanticos = new Set(semanticos.map((f) => f.id));
+
+    const fragmentos = ids.flatMap((id) => {
+      const fila = porId.get(id);
+      if (!fila) return [];
+      const origen = origenDeHallazgo({
+        exacto: idsExactos.has(id),
+        parcial: idsParciales.has(id),
+        semantico: idsSemanticos.has(id),
+      });
+      return [aFragmentoChunk(fila, tituloDeHallazgo(fila.titulo, origen, consulta))];
+    });
+    if (fragmentos.length > 0) return fragmentos;
+
+    const { rows: titulos } = await db.execute<{ titulo: string }>(sql`
+      SELECT titulo FROM material
+      WHERE categoria = ANY(${arregloTexto(categorias)})
+      ORDER BY titulo
+      LIMIT ${MAX_TITULOS_MATERIAL}
+    `);
+    return sinCoincidenciasMaterial(
+      consulta,
+      titulos.map((fila) => fila.titulo),
+    );
   }
 
   const exactas = await db.execute<FilaMaterial>(sql`
@@ -366,17 +526,10 @@ async function buscarEnMaterial(
     LIMIT ${MAX_TITULOS_MATERIAL}
   `);
 
-  return [
-    {
-      titulo: `SIN COINCIDENCIAS para "${consulta}"`,
-      url: FUENTE_FACULTAD,
-      contenido:
-        `No hay nada sobre "${consulta}" en esta parte de la base de conocimiento. Los ` +
-        'documentos disponibles son estos; si alguno cubre lo que preguntó el alumno, ' +
-        'ofrecéselo, y si no, decile que ese dato todavía no está cargado.\n\n' +
-        titulos.map((fila) => `- ${fila.titulo}`).join('\n'),
-    },
-  ];
+  return sinCoincidenciasMaterial(
+    consulta,
+    titulos.map((fila) => fila.titulo),
+  );
 }
 
 export async function obtenerPlanDeEstudio(plan: string): Promise<FragmentoContexto[]> {
@@ -399,10 +552,10 @@ export async function obtenerContextoDeOpcion(
     case 1:
       return buscarHorarios(consulta, ia);
     case 2:
-      return buscarEnMaterial(['calendario'], consulta);
+      return buscarEnMaterial(['calendario'], consulta, ia);
     case 3:
-      return buscarEnMaterial(['plan_estudios'], consulta);
+      return buscarEnMaterial(['plan_estudios'], consulta, ia);
     case 4:
-      return buscarEnMaterial(['infraestructura', 'enlace', 'grupo_wpp'], consulta);
+      return buscarEnMaterial(['infraestructura', 'enlace', 'grupo_wpp'], consulta, ia);
   }
 }

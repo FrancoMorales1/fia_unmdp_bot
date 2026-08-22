@@ -45,6 +45,8 @@ const envSchema = z.object({
       (m) => /^gemini-\d+\.\d+-flash/i.test(m),
       'Solo se permiten modelos gratuitos (familia Flash). Ejemplo: gemini-2.5-flash',
     ),
+  /** Embeddings del material (RAG). `gemini-embedding-001` admite recorte a 768. */
+  GEMINI_EMBEDDING_MODEL: z.string().min(1).default('gemini-embedding-001'),
 
   // WhatsApp / Baileys
   WHATSAPP_SESSION_PATH: z.string().default('./.auth'),
