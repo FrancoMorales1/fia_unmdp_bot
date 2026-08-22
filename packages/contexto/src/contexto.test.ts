@@ -13,6 +13,7 @@ const {
   carrerasDePlanes,
   obtenerContenidoCalendario,
   obtenerContenidoFacultad,
+  obtenerContenidoIngreso,
   obtenerPlanDeEstudio,
   planesDeEstudio,
 } = await import('./contexto.js');
@@ -103,11 +104,36 @@ describe('obtenerContenidoCalendario', () => {
   });
 });
 
+describe('obtenerContenidoIngreso', () => {
+  it('lee la guía de ingreso a Ingeniería 2027', async () => {
+    const fragmento = await obtenerContenidoIngreso();
+
+    expect(fragmento.titulo).toBe('Ingreso a Ingeniería 2027');
+    expect(fragmento.contenido).toContain('GUÍA DE INGRESO 2027');
+    expect(fragmento.archivo).toBeUndefined();
+  });
+
+  it('cachea el contenido: la segunda llamada no vuelve a leer el archivo', () => {
+    const primera = obtenerContenidoIngreso();
+    const segunda = obtenerContenidoIngreso();
+
+    expect(segunda).toBe(primera);
+  });
+});
+
 // Referencia cruzada: confirma que el archivo que lee obtenerContenidoFacultad
 // existe de verdad y que el fixture no se desincronizó de material/.
 describe('archivos de material/', () => {
   it('el archivo de información de la facultad existe', async () => {
     const ruta = new URL('../../../material/Información de la facultad.txt', import.meta.url);
+    await expect(readFile(ruta, 'utf8')).resolves.not.toHaveLength(0);
+  });
+
+  it('el archivo de ingreso existe', async () => {
+    const ruta = new URL(
+      '../../../material/ingreso_ingenieria_2027_guia_ingresantes.txt',
+      import.meta.url,
+    );
     await expect(readFile(ruta, 'utf8')).resolves.not.toHaveLength(0);
   });
 });

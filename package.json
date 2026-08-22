@@ -36,6 +36,7 @@
     "@types/node": "catalog:",
     "@vitest/coverage-v8": "catalog:",
     "drizzle-orm": "catalog:",
+    "esbuild": "0.28.2",
     "eslint": "catalog:",
     "eslint-config-prettier": "catalog:",
     "eslint-import-resolver-typescript": "catalog:",

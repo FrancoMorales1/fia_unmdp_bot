@@ -42,6 +42,13 @@ describe('parsearOpcion', () => {
     });
   });
 
+  it('acepta la opción de ingreso 2027', () => {
+    expect(parsearOpcion('5 inscripción al SIFI')).toEqual({
+      numero: 5,
+      consulta: 'inscripción al SIFI',
+    });
+  });
+
   it('tolera un separador entre el número y la consulta', () => {
     expect(parsearOpcion('3. ingeniería química')).toEqual({
       numero: 3,
@@ -144,16 +151,17 @@ describe('interpretar', () => {
 });
 
 describe('menuInicial', () => {
-  it('ofrece las cuatro opciones como botones', () => {
+  it('ofrece las cinco opciones como botones', () => {
     const menu = menuInicial('Franco');
 
     expect(menu.texto).toContain('Franco');
-    expect(menu.opciones).toHaveLength(4);
+    expect(menu.opciones).toHaveLength(5);
     expect(menu.opciones?.map((o) => o.id)).toEqual([
       'opcion:1',
       'opcion:2',
       'opcion:3',
       'opcion:4',
+      'opcion:5',
     ]);
   });
 
@@ -167,7 +175,7 @@ describe('menuInicial', () => {
     const { menuInicial: menuInicialConWebApp } = await import('./menu.js');
     const menu = menuInicialConWebApp('Franco');
 
-    expect(menu.opciones).toHaveLength(5);
+    expect(menu.opciones).toHaveLength(6);
     expect(menu.opciones?.at(-1)).toEqual({
       id: 'opcion:web',
       etiqueta: '📱 Abrir menú interactivo',

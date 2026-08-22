@@ -1,6 +1,6 @@
 import { env, type MensajeEntrante, type OpcionMenu, type RespuestaSalida } from '@fi/core';
 
-export type NumeroOpcion = 1 | 2 | 3 | 4;
+export type NumeroOpcion = 1 | 2 | 3 | 4 | 5;
 
 interface DefinicionOpcion {
   numero: NumeroOpcion;
@@ -37,6 +37,12 @@ const DEFINICIONES = {
     pedido: '¿Qué necesitás saber?',
     placeholder: 'Ej: horarios de la biblioteca',
   },
+  5: {
+    numero: 5,
+    etiqueta: '🎓 Ingreso a Ingeniería 2027',
+    pedido: '¿Qué necesitás saber sobre el ingreso?',
+    placeholder: 'Ej: cómo me inscribo al SIFI',
+  },
 } as const satisfies Record<NumeroOpcion, DefinicionOpcion>;
 
 export const OPCIONES: readonly DefinicionOpcion[] = Object.values(DEFINICIONES);
@@ -54,7 +60,7 @@ function opcionDesdeId(id: string): NumeroOpcion | null {
 }
 
 function esNumeroDeOpcion(valor: number): valor is NumeroOpcion {
-  return valor === 1 || valor === 2 || valor === 3 || valor === 4;
+  return valor === 1 || valor === 2 || valor === 3 || valor === 4 || valor === 5;
 }
 
 function botones(): OpcionMenu[] {
@@ -218,7 +224,7 @@ export function normalizarConsulta(texto: string): string {
  * Sigue vivo porque es la única forma de elegir en WhatsApp, que no tiene botones.
  */
 export function parsearOpcion(mensaje: string): { numero: NumeroOpcion; consulta: string } | null {
-  const match = /^([1-4])\b[\s.:)-]*([\s\S]*)$/.exec(mensaje.trim());
+  const match = /^([1-5])\b[\s.:)-]*([\s\S]*)$/.exec(mensaje.trim());
   if (!match) return null;
 
   const numero = Number(match[1]);
@@ -311,5 +317,9 @@ export function mensajeParaIA(opcion: { numero: NumeroOpcion; consulta: string }
       return consulta
         ? `¿Dónde encuentro información sobre ${consulta}?`
         : '¿Cuáles son los grupos de WhatsApp, enlaces y servicios de la facultad?';
+    case 5:
+      return consulta
+        ? `¿Qué dice la guía de ingreso 2027 sobre ${consulta}?`
+        : '¿Qué pasos y requisitos hay para ingresar a Ingeniería en 2027?';
   }
 }

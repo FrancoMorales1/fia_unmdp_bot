@@ -2,6 +2,7 @@ export {
   carrerasDePlanes,
   obtenerContenidoCalendario,
   obtenerContenidoFacultad,
+  obtenerContenidoIngreso,
   obtenerContextoDeOpcion,
   obtenerPlanDeEstudio,
   planesDeEstudio,
