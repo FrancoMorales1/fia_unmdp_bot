@@ -1,0 +1,276 @@
+{
+  "id": "0af38e6c-7518-4071-8a8f-bcc79ed7923d",
+  "prevId": "250fe39a-1558-4810-99d8-0f8616ea2e89",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.cursadas": {
+      "name": "cursadas",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "entry_id": {
+          "name": "entry_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "fecha": {
+          "name": "fecha",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "dia_semana": {
+          "name": "dia_semana",
+          "type": "smallint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "hora_inicio": {
+          "name": "hora_inicio",
+          "type": "time",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "hora_fin": {
+          "name": "hora_fin",
+          "type": "time",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "materia": {
+          "name": "materia",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "titulo_crudo": {
+          "name": "titulo_crudo",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tipo": {
+          "name": "tipo",
+          "type": "tipo_clase",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "comision": {
+          "name": "comision",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "aula": {
+          "name": "aula",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "capacidad": {
+          "name": "capacidad",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "scrapeado_en": {
+          "name": "scrapeado_en",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "cursadas_entry_fecha_idx": {
+          "name": "cursadas_entry_fecha_idx",
+          "columns": [
+            {
+              "expression": "entry_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "fecha",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "cursadas_fecha_idx": {
+          "name": "cursadas_fecha_idx",
+          "columns": [
+            {
+              "expression": "fecha",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "hora_inicio",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "cursadas_busqueda_idx": {
+          "name": "cursadas_busqueda_idx",
+          "columns": [
+            {
+              "expression": "to_tsvector('public.espanol_sin_acentos', \"materia\" || ' ' || \"titulo_crudo\")",
+              "asc": true,
+              "isExpression": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "gin",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.planes_estudio": {
+      "name": "planes_estudio",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "carrera": {
+          "name": "carrera",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "version": {
+          "name": "version",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "anio": {
+          "name": "anio",
+          "type": "smallint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "etiqueta": {
+          "name": "etiqueta",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "archivo": {
+          "name": "archivo",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "creado_en": {
+          "name": "creado_en",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "planes_estudio_etiqueta_idx": {
+          "name": "planes_estudio_etiqueta_idx",
+          "columns": [
+            {
+              "expression": "etiqueta",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "planes_estudio_carrera_version_idx": {
+          "name": "planes_estudio_carrera_version_idx",
+          "columns": [
+            {
+              "expression": "carrera",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "version",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {
+    "public.tipo_clase": {
+      "name": "tipo_clase",
+      "schema": "public",
+      "values": [
+        "teoria",
+        "practica",
+        "teorico_practica",
+        "otro"
+      ]
+    }
+  },
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

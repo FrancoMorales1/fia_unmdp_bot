@@ -40,6 +40,14 @@ const envSchema = z.object({
 
   // Postgres
   DATABASE_URL: z.url().startsWith('postgres'),
+  /**
+   * Tamaño del pool de `pg`. En apps/bot (un solo proceso persistente) el
+   * default de 10 está bien; en apps/web (serverless) cada invocación es de
+   * vida corta y no necesita tantas conexiones simultáneas — conviene bajarlo
+   * bastante (1-3) si se conecta directo, o usar el pooler de Supabase, que
+   * ya multiplexa por su cuenta.
+   */
+  DATABASE_POOL_MAX: z.coerce.number().int().positive().default(10),
 
   // Redis (BullMQ)
   REDIS_URL: z.url().startsWith('redis').default('redis://localhost:6379'),
