@@ -20,7 +20,8 @@ export const INSTRUCCION_POR_OPCION = {
   2: 'Respondés sobre el calendario académico 2026: fechas de inscripción, períodos de exámenes, feriados y plazos administrativos.',
   3: 'Respondés sobre planes de estudio: asignaturas, correlativas, créditos y requisitos de egreso de cada carrera.',
   4: 'Respondés sobre infraestructura, grupos de WhatsApp, enlaces y contactos de la facultad.',
-} as const satisfies Record<1 | 2 | 3 | 4, string>;
+  5: 'Respondés sobre el proceso de ingreso 2027 a las carreras de Ingeniería: registro, curso nivelatorio, requisitos, inscripción y fechas.',
+} as const satisfies Record<1 | 2 | 3 | 4 | 5, string>;
 
 export type NumeroOpcionIA = keyof typeof INSTRUCCION_POR_OPCION;
 

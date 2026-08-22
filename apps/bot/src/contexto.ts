@@ -305,6 +305,7 @@ export async function obtenerPlanDeEstudio(etiqueta: string): Promise<FragmentoC
 
 const CALENDARIO_ARCHIVO = 'CALENDARIO ACADEMICO 2026.pdf';
 const FACULTAD_ARCHIVO = 'Información de la facultad.txt';
+const INGRESO_ARCHIVO = 'ingreso_ingenieria_2027_guia_ingresantes.txt';
 
 let calendarioCache: Promise<FragmentoContexto> | undefined;
 
@@ -333,6 +334,17 @@ export function obtenerContenidoFacultad(): Promise<FragmentoContexto> {
   return facultadCache;
 }
 
+let ingresoCache: Promise<FragmentoContexto> | undefined;
+
+export function obtenerContenidoIngreso(): Promise<FragmentoContexto> {
+  ingresoCache ??= (async () => {
+    const ruta = resolve(MATERIAL_DIR, INGRESO_ARCHIVO);
+    const contenido = await readFile(ruta, 'utf8');
+    return { titulo: 'Ingreso a Ingeniería 2027', url: FUENTE_FACULTAD, contenido };
+  })();
+  return ingresoCache;
+}
+
 // ── Router por opción de menú ─────────────────────────────────────────────────
 //
 // La opción 3 (plan de estudios) no pasa por acá: necesita el plan activo en
@@ -340,7 +352,7 @@ export function obtenerContenidoFacultad(): Promise<FragmentoContexto> {
 // main.ts junto con el resto de la sesión.
 
 export async function obtenerContextoDeOpcion(
-  opcion: 1 | 2 | 4,
+  opcion: 1 | 2 | 4 | 5,
   consulta: string,
   ia: ProveedorIA,
 ): Promise<FragmentoContexto[] | SeleccionDeMaterias> {
@@ -351,5 +363,7 @@ export async function obtenerContextoDeOpcion(
       return [await obtenerContenidoCalendario()];
     case 4:
       return [await obtenerContenidoFacultad()];
+    case 5:
+      return [await obtenerContenidoIngreso()];
   }
 }

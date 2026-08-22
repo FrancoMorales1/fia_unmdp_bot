@@ -1,0 +1,183 @@
+================================================================================
+GUÍA DE INGRESO 2027 - FACULTAD DE INGENIERÍA (UNMdP)
+Información oficial para ingresantes y aspirantes a carreras de Ingeniería
+================================================================================
+
+--------------------------------------------------------------------------------
+1. RESUMEN DEL PROCESO DE INGRESO
+--------------------------------------------------------------------------------
+Para ingresar a cualquiera de las 10 carreras de Ingeniería en 2027, debés cumplir 
+con los siguientes pasos fundamentales:
+
+  1. Registro en el sistema SIFI (Obligatorio - a partir de Agosto 2026).
+  2. Realización del Curso Nivelatorio (Optativo/Recomendable) y Aprobación 
+     del Requisito Académico obligatorio.
+  3. Matriculación y acceso al Campus Virtual (Moodle).
+  4. Inscripción formal a la UNMdP por SIU Guaraní (Obligatorio - Octubre a Noviembre 2026).
+
+
+--------------------------------------------------------------------------------
+2. REGISTRO EN EL SISTEMA SIFI (OBLIGATORIO)
+--------------------------------------------------------------------------------
+* Qué es: Sistema de Ingreso de la Facultad de Ingeniería.
+* Enlace: https://ingreso.fi.mdp.edu.ar/
+* Habilitación: A partir de Agosto de 2026.
+* Funciones: Permite gestionar tu legajo, inscribirte a cursos/comisiones, anotarte 
+  a exámenes, consultar notas y subir la documentación requerida.
+
+Documentación a adjuntar en SIFI:
+  - En el campo "PLANILLA":
+      a) Foto/PDF del DNI.
+      b) Planilla de Preinscripción UNMdP 2027 (se sube una sola vez, luego de 
+         completar el SIU Guaraní a partir de Octubre).
+  - En el campo "TÍTULO":
+      a) Certificado de título en trámite sin adeudar materias del secundario completo, 
+         O el Analítico final del secundario.
+      *(Nota: No se aceptan diplomas ni certificados de alumno regular para rendir).*
+
+* IMPORTANTE: Para poder rendir los exámenes del ingreso se requiere estar registrado 
+  en el SIFI con toda la documentación, y estar inscripto y validado en la UNMdP.
+
+
+--------------------------------------------------------------------------------
+3. REQUISITO ACADÉMICO Y CURSO NIVELATORIO
+--------------------------------------------------------------------------------
+REQUISITO ACADÉMICO: INTRODUCCIÓN A LA CIENCIA Y LA INGENIERÍA (OBLIGATORIO)
+* Carácter: Obligatorio para todos los aspirantes a las 10 carreras de Ingeniería.
+* Evaluación: Escala Aprobado / Desaprobado.
+* Módulos que lo componen:
+    1. Aproximación a la Matemática.
+    2. Introducción a la Química.
+    3. Física Básica.
+
+CURSO NIVELATORIO (OPTATIVO Y GRATUITO)
+* Objetivo: Repasar nociones de nivel secundario, razonamiento lógico, resolución de 
+  problemas y conceptos clave para las materias de primer año.
+* Modalidad: Presencial y/o virtual a través del Campus de la Facultad.
+* Períodos de cursada y turnos de examen:
+    - Curso 1: Septiembre a Noviembre (Rinde en Diciembre).
+    - Curso 2: Curso de consulta en Febrero (Rinde en Febrero/Marzo).
+    - Curso 3: Abril a Junio (Rinde en Julio).
+
+* Requisito para rendir exámenes: Título en trámite (sin materias previas) o analítico, 
+  junto a la inscripción y validación en la UNMdP.
+
+
+--------------------------------------------------------------------------------
+4. HORARIOS Y COMISIONES PRESENCIALES
+--------------------------------------------------------------------------------
+Aproximación a la Matemática (Aula 206):
+  - Comisión 1: Lunes y Miércoles, de 16:00 a 18:00 hs.
+  - Comisión 2: Martes y Jueves, de 15:00 a 17:00 hs.
+  - Comisión 3: Jueves y Viernes, de 18:00 a 20:00 hs.
+
+Física Básica:
+  - Comisiones 1, 2 y 3: Sábados, de 10:00 a 13:00 hs.
+      * Comisión 1 -> Aula 206
+      * Comisión 2 -> Aula 209
+      * Comisión 3 -> Aula 211
+  - Clase de consulta (refuerzo): Viernes, de 16:00 a 18:00 hs (Aula 206).
+
+Introducción a la Química (Aula 206):
+  - Comisión 1: Lunes, de 18:00 a 20:00 hs.
+  - Comisión 2: Martes, de 17:00 a 19:00 hs.
+  - Comisión 3: Miércoles, de 18:00 a 20:00 hs.
+
+* Modalidad Virtual: Las clases virtuales, horarios de conexión y material de estudio 
+  se informan directamente dentro del campus virtual de cada módulo.
+
+
+--------------------------------------------------------------------------------
+5. CAMPUS VIRTUAL DE INGENIERÍA (MOODLE)
+--------------------------------------------------------------------------------
+* Enlace: https://ingenieria.campus.mdp.edu.ar/
+* Tutorial de acceso: https://www.youtube.com/watch?v=41DSehb9TzM
+* Alta de usuario: Se habilita automáticamente a las 72 horas hábiles posteriores 
+  al registro en SIFI.
+* Matriculación en materias:
+    - Todos los ingresantes registrados en SIFI quedan matriculados automáticamente 
+      en las aulas virtuales de los tres módulos.
+    - Cursado Presencial: Además de estar matriculado, debés inscribirte a la comisión 
+      por el sistema SIFI.
+    - Cursado Virtual: No requiere inscripción a comisión en SIFI, únicamente seguir 
+      la actividad en el Campus.
+* Soporte técnico del Campus:
+    - Si tenés problemas de acceso, escribí a: gestor.ingenieria.campus@fi.mdp.edu.ar
+    - Incluir en el correo: Apellido, Nombre, DNI y Módulo/s correspondientes.
+
+
+--------------------------------------------------------------------------------
+6. INSCRIPCIÓN CENTRAL A LA UNMDP POR SIU GUARANÍ (OBLIGATORIO)
+--------------------------------------------------------------------------------
+* Período de inscripción: De Octubre a Noviembre de 2026.
+* Portal de información: https://www.mdp.edu.ar/index.php/ensenanza/ingresante
+* Procedimiento:
+    1. Registrarse en el sistema SIU Guaraní.
+    2. Completar todos los campos obligatorios de datos personales.
+    3. Adjuntar la documentación digital requerida:
+        - Foto/escaneo del DNI (ambas caras).
+        - Foto/escaneo de Certificado de alumno regular, Constancia de finalización 
+          de secundario (título en trámite sin adeudar materias) o Analítico final.
+    4. Descargar la Planilla de Preinscripción UNMdP y subirla al sistema SIFI (una sola vez).
+    5. Validación: La solicitud no se aprueba automáticamente; pasa por auditoría. 
+       Recibirás la confirmación por correo electrónico.
+
+Módulos del SIU según tu situación:
+  - Módulo Preinscripción: Para aspirantes que se inscriben por primera vez a la UNMdP.
+  - Módulo Autogestión: Para aspirantes con inscripciones previas o estudiantes/ex-estudiantes 
+    de la UNMdP que deseen inscribirse a otra carrera o reiniciar en el ciclo 2027.
+
+
+--------------------------------------------------------------------------------
+7. CASOS ESPECIALES: EXTRANJEROS Y MAYORES DE 25 AÑOS
+--------------------------------------------------------------------------------
+ESTUDIANTES EXTRANJEROS Y TÍTULOS DEL EXTERIOR:
+* Documento de identidad:
+    - Extranjeros: Cédula diplomática y pasaporte.
+    - Naturalizados: DNI argentino.
+* Convalidación de estudios secundarios:
+    - Debe presentarse el título convalidado por el Ministerio de Educación de la Nación.
+    - Inscripción condicional: Se permite con el comprobante de "convalidación iniciada", 
+      pero caduca si no se presenta el definitivo en el plazo máximo estipulado.
+    - Trámites de convalidación:
+        * Países con convenio: https://www.argentina.gob.ar/educacion/tramites/convalidar-titulo-secundario-de-paises-con-convenio
+        * Países sin convenio: https://www.argentina.gob.ar/educacion/tramites/reconocer-titulo-secundario-de-paises-sin-convenio
+
+MAYORES DE 25 AÑOS SIN TÍTULO SECUNDARIO (ART. 7° LEY 24.521 / OCS 92/2022):
+* Destinatarios: Personas mayores de 25 años sin secundario completo que deseen cursar 
+  carreras de grado o pregrado.
+* Período de inscripción: Del 1 al 30 de Septiembre de 2026 (RD 1039/25).
+* Trámite: Obligatorio presentarse personalmente por el Área de Ingreso de la Facultad 
+  de Ingeniería para iniciar el expediente correspondiente.
+
+
+--------------------------------------------------------------------------------
+8. CONTACTOS OFICIALES Y ATENCIÓN / CANAL DE ESCALACIÓN
+--------------------------------------------------------------------------------
+DAFI - DIVISIÓN ADMISIÓN FACULTAD DE INGENIERÍA (Área de Ingreso FI):
+* Atención presencial: Lunes a viernes de 10:00 a 13:00 hs y de 14:00 a 15:00 hs.
+* Ubicación: Av. Juan B. Justo 4302, Mar del Plata.
+* Teléfono: (0223) 481-0046 (Interno 222).
+* Correo electrónico: ingreso@fi.mdp.edu.ar
+* Redes y canales de novedades: 
+    - Instagram: @ingresofi
+    - Mensajería interna del Sistema SIFI (https://ingreso.fi.mdp.edu.ar/)
+
+SOPORTE CAMPUS VIRTUAL FI:
+* Correo electrónico: gestor.ingenieria.campus@fi.mdp.edu.ar
+
+DIRECCIÓN CENTRAL DE INGRESO UNMDP:
+* Correos electrónicos: direccioningresounmdp@mdp.edu.ar / direccioningresounmdp@gmail.com
+
+
+--------------------------------------------------------------------------------
+9. MENSAJE DE RESPALDO / FALLBACK DEL BOT (CUANDO NO PUEDE RESPONDER)
+--------------------------------------------------------------------------------
+Si tenés una consulta específica que no pude resolver o requerís atención personalizada:
+- DAFI (División Admisión Facultad de Ingeniería):
+    * Atención presencial: Lunes a viernes de 10 a 13 hs y de 14 a 15 hs en Av. Juan B. Justo 4302.
+    * Teléfono: 0223 4810046 int. 222
+    * Correo: ingreso@fi.mdp.edu.ar
+    * Novedades: Seguí @ingresofi en Instagram y revisá la mensajería interna del SIFI.
+    * Instrucciones: Al entrar, a la izquierda y despues a la derecha enfrente de las mesas de estudio
+================================================================================

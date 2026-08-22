@@ -22,3 +22,5 @@ Aula 00x: planta base
 Aula 1xx: primer piso
 Aula 2xx: segundo piso
 Bedelía: segundo piso
+
+Departamento alumnos: alumnos@fi.mdp.edu.ar. Horarios 9:30am a 12:00pm. Instrucciones para llegar: Al entrar, a la izquierda, seguis derecho y al pasar las escaleras ventanilla a la izquierda.
