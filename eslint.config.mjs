@@ -13,8 +13,6 @@ export default defineConfig([
     '**/node_modules/**',
     '**/drizzle/**',
     '**/.turbo/**',
-    '**/.next/**',
-    'apps/web/next-env.d.ts',
     'pnpm-lock.yaml',
   ]),
 
@@ -124,20 +122,6 @@ export default defineConfig([
   {
     files: ['packages/core/src/**/*.ts'],
     rules: { 'no-restricted-syntax': 'off' },
-  },
-
-  // apps/web (Next.js): layout/page necesitan default export por convención
-  // del framework, y el código de cliente corre en el navegador, no en Node.
-  {
-    files: ['apps/web/**/*.{ts,tsx}'],
-    languageOptions: {
-      ecmaVersion: 2023,
-      globals: { ...globals.browser },
-      parserOptions: { ecmaFeatures: { jsx: true } },
-    },
-    rules: {
-      'import-x/no-default-export': 'off',
-    },
   },
 
   prettier,

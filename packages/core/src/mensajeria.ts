@@ -25,12 +25,6 @@ export interface OpcionMenu {
   etiqueta: string;
   /** Qué tiene que escribir el usuario para elegirla donde no hay botones. */
   atajo?: string | undefined;
-  /**
-   * Si está presente, el botón abre esta URL como Telegram Mini App en vez de
-   * mandar `id` como callback. Solo lo soporta Telegram: los canales de texto
-   * plano (WhatsApp) descartan esta opción en vez de ofrecerla.
-   */
-  abrirWebApp?: string | undefined;
 }
 
 /** Pedido de texto libre: en Telegram abre una celda de respuesta ya enfocada. */
@@ -69,9 +63,7 @@ export type ManejadorMensaje = (mensaje: MensajeEntrante) => Promise<Salida | un
 export function aTextoPlano(salida: Salida): string {
   if (typeof salida === 'string') return salida;
 
-  const { texto, opcionesSoloEnBotones } = salida;
-  // Un link de Mini App de Telegram no sirve por WhatsApp.
-  const opciones = salida.opciones?.filter((o) => !o.abrirWebApp);
+  const { texto, opciones, opcionesSoloEnBotones } = salida;
   if (opcionesSoloEnBotones || !opciones || opciones.length === 0) return texto;
 
   const lista = opciones.map((o) => `${o.atajo ?? '•'} - ${o.etiqueta}`).join('\n');

@@ -1,12 +1,5 @@
 import { crearProveedorGemini, instruccionParaOpcion } from '@fi/ai';
 import {
-  carrerasDePlanes,
-  obtenerContenidoCalendario,
-  obtenerContextoDeOpcion,
-  obtenerPlanDeEstudio,
-  planesDeEstudio,
-} from '@fi/contexto';
-import {
   createLogger,
   env,
   type ClienteMensajeria,
@@ -17,6 +10,13 @@ import { cerrarConexion } from '@fi/db';
 import { crearClienteTelegram } from '@fi/telegram';
 import { crearClienteWhatsapp } from '@fi/whatsapp';
 
+import {
+  carrerasDePlanes,
+  obtenerContenidoCalendario,
+  obtenerContextoDeOpcion,
+  obtenerPlanDeEstudio,
+  planesDeEstudio,
+} from './contexto.js';
 import {
   botonesDeSeguimiento,
   carreraElegida,
@@ -231,19 +231,7 @@ function manejadorMensaje(plataforma: string) {
 const whatsapp = crearClienteWhatsapp({ onMensaje: manejadorMensaje('whatsapp') });
 
 const telegram: ClienteMensajeria | undefined = env.TELEGRAM_BOT_TOKEN
-  ? crearClienteTelegram({
-      onMensaje: manejadorMensaje('telegram'),
-      comandos: COMANDOS,
-      ...(env.TELEGRAM_WEBHOOK_URL
-        ? {
-            webhook: {
-              url: env.TELEGRAM_WEBHOOK_URL,
-              puerto: env.TELEGRAM_WEBHOOK_PORT,
-              ...(env.TELEGRAM_WEBHOOK_SECRET ? { secretToken: env.TELEGRAM_WEBHOOK_SECRET } : {}),
-            },
-          }
-        : {}),
-    })
+  ? crearClienteTelegram({ onMensaje: manejadorMensaje('telegram'), comandos: COMANDOS })
   : undefined;
 
 const scraping = await iniciarScraping();

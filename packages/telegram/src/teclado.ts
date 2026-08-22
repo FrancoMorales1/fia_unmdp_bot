@@ -28,11 +28,7 @@ export function marcadoDeRespuesta(salida: RespuestaSalida): MarcadoDeRespuesta 
     // fila vacía colgando al final del teclado.
     for (const [indice, opcion] of salida.opciones.entries()) {
       if (indice > 0) teclado.row();
-      if (opcion.abrirWebApp) {
-        teclado.webApp(opcion.etiqueta, opcion.abrirWebApp);
-      } else {
-        teclado.text(opcion.etiqueta, opcion.id);
-      }
+      teclado.text(opcion.etiqueta, opcion.id);
     }
 
     return teclado;

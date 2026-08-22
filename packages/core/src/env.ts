@@ -26,11 +26,7 @@ function buscarAncestro(desde: string, marcador: string): string | undefined {
 const dirEnv = buscarAncestro(process.cwd(), '.env');
 loadDotenv(dirEnv ? { path: join(dirEnv, '.env'), quiet: true } : { quiet: true });
 
-/**
- * Raíz del monorepo (donde vive `material/`), ubicada por `pnpm-workspace.yaml`
- * en vez de por el `.env` porque en Vercel no hay `.env` —las env vars las
- * inyecta la plataforma— pero el checkout del repo sí incluye ese archivo.
- */
+/** Raíz del monorepo (donde vive `material/`), ubicada por `pnpm-workspace.yaml`. */
 export const RAIZ_MONOREPO =
   buscarAncestro(process.cwd(), 'pnpm-workspace.yaml') ?? dirEnv ?? process.cwd();
 
@@ -40,14 +36,6 @@ const envSchema = z.object({
 
   // Postgres
   DATABASE_URL: z.url().startsWith('postgres'),
-  /**
-   * Tamaño del pool de `pg`. En apps/bot (un solo proceso persistente) el
-   * default de 10 está bien; en apps/web (serverless) cada invocación es de
-   * vida corta y no necesita tantas conexiones simultáneas — conviene bajarlo
-   * bastante (1-3) si se conecta directo, o usar el pooler de Supabase, que
-   * ya multiplexa por su cuenta.
-   */
-  DATABASE_POOL_MAX: z.coerce.number().int().positive().default(10),
 
   // Redis (BullMQ)
   REDIS_URL: z.url().startsWith('redis').default('redis://localhost:6379'),
@@ -68,18 +56,6 @@ const envSchema = z.object({
 
   // Telegram
   TELEGRAM_BOT_TOKEN: z.string().optional(),
-  /**
-   * URL pública HTTPS del webhook. Si se configura, el bot recibe los updates
-   * de Telegram por webhook en vez de long polling. Sin esto, long polling
-   * (el comportamiento de siempre).
-   */
-  TELEGRAM_WEBHOOK_URL: z.url().optional(),
-  /** Puerto local donde escuchar el webhook. Telegram solo acepta 443, 80, 88 u 8443. */
-  TELEGRAM_WEBHOOK_PORT: z.coerce.number().int().positive().default(8443),
-  /** Valida que los updates recibidos por webhook vengan realmente de Telegram. */
-  TELEGRAM_WEBHOOK_SECRET: z.string().optional(),
-  /** URL pública (Vercel) de la Mini App. Sin esto no se ofrece el botón para abrirla. */
-  WEB_APP_URL: z.url().optional(),
 
   // Scrapper: sistema de reserva de salas (MRBS) de la Facultad
   SCRAPPER_BASE_URL: z.url().default('https://salas.fi.mdp.edu.ar/index.php'),
@@ -89,8 +65,8 @@ const envSchema = z.object({
   SCRAPPER_DIAS: z.coerce.number().int().min(1).max(31).default(7),
   SCRAPPER_CRON: z.string().default('0 4 * * *'),
   SCRAPPER_TZ: z.string().default('America/Argentina/Buenos_Aires'),
-  /** Corre el scrapeo apenas arranca, sin esperar a las 4am. Útil la primera vez. */
-  SCRAPPER_AL_INICIAR: z.stringbool().default(false),
+  /** Corre el scrapeo apenas arranca, sin esperar a las 4am. */
+  SCRAPPER_AL_INICIAR: z.stringbool().default(true),
 
   // Rate limiting por usuario
   /** Máximo de mensajes permitidos por usuario dentro de la ventana. */

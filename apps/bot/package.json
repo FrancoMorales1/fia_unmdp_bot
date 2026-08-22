@@ -15,7 +15,6 @@
   },
   "dependencies": {
     "@fi/ai": "workspace:*",
-    "@fi/contexto": "workspace:*",
     "@fi/core": "workspace:*",
     "@fi/db": "workspace:*",
     "@fi/queue": "workspace:*",

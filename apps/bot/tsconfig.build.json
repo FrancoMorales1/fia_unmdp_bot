@@ -12,7 +12,6 @@
     { "path": "../../packages/queue/tsconfig.build.json" },
     { "path": "../../packages/ai/tsconfig.build.json" },
     { "path": "../../packages/scrapper/tsconfig.build.json" },
-    { "path": "../../packages/contexto/tsconfig.build.json" },
     { "path": "../../packages/whatsapp/tsconfig.build.json" },
     { "path": "../../packages/telegram/tsconfig.build.json" }
   ]

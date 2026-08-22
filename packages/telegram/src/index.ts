@@ -1,10 +1,4 @@
-export {
-  crearClienteTelegram,
-  PUERTOS_WEBHOOK_VALIDOS,
-  type ComandoTelegram,
-  type OpcionesCliente,
-  type OpcionesWebhook,
-} from './cliente.js';
+export { crearClienteTelegram, type ComandoTelegram, type OpcionesCliente } from './cliente.js';
 export { marcadoDeRespuesta, type MarcadoDeRespuesta } from './teclado.js';
 export type {
   ClienteTelegram,

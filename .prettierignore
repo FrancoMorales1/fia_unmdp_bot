@@ -5,5 +5,3 @@ pnpm-lock.yaml
 *.tsbuildinfo
 packages/db/drizzle
 .husky/_
-apps/web/.next
-apps/web/next-env.d.ts
