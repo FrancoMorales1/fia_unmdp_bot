@@ -1,4 +1,4 @@
-import type { MensajeEntrante, OpcionMenu, RespuestaSalida } from '@fi/core';
+import { env, type MensajeEntrante, type OpcionMenu, type RespuestaSalida } from '@fi/core';
 
 export type NumeroOpcion = 1 | 2 | 3 | 4;
 
@@ -58,11 +58,19 @@ function esNumeroDeOpcion(valor: number): valor is NumeroOpcion {
 }
 
 function botones(): OpcionMenu[] {
-  return OPCIONES.map((o) => ({
+  const deOpciones = OPCIONES.map((o) => ({
     id: idDeOpcion(o.numero),
     etiqueta: o.etiqueta,
     atajo: String(o.numero),
   }));
+
+  // Sin WEB_APP_URL (dev local, o todavía no deployada) no se ofrece un botón roto.
+  if (!env.WEB_APP_URL) return deOpciones;
+
+  return [
+    ...deOpciones,
+    { id: 'opcion:web', etiqueta: '📱 Abrir menú interactivo', abrirWebApp: env.WEB_APP_URL },
+  ];
 }
 
 // ── Mensajes que manda el bot ────────────────────────────────────────────────

@@ -5,16 +5,17 @@ import { config as loadDotenv } from 'dotenv';
 import { z } from 'zod';
 
 /**
- * El `.env` vive en la raíz del monorepo, pero los scripts corren con el cwd en
- * su propio package (`pnpm dev` => apps/bot). Se sube por el árbol hasta
- * encontrarlo, si no cada package necesitaría su propia copia.
+ * Sube por el árbol de directorios desde `desde` hasta encontrar uno que
+ * tenga `marcador` adentro. Sirve tanto para el `.env` (vive en la raíz del
+ * monorepo, pero los scripts corren con el cwd en su propio package —
+ * `pnpm dev` => apps/bot) como para ubicar la raíz del repo en general.
  */
-function buscarEnv(desde: string): string | undefined {
+function buscarAncestro(desde: string, marcador: string): string | undefined {
   let dir = desde;
 
   for (;;) {
-    const candidato = join(dir, '.env');
-    if (existsSync(candidato)) return candidato;
+    const candidato = join(dir, marcador);
+    if (existsSync(candidato)) return dir;
 
     const padre = dirname(dir);
     if (padre === dir) return undefined;
@@ -22,8 +23,16 @@ function buscarEnv(desde: string): string | undefined {
   }
 }
 
-const rutaEnv = buscarEnv(process.cwd());
-loadDotenv(rutaEnv ? { path: rutaEnv, quiet: true } : { quiet: true });
+const dirEnv = buscarAncestro(process.cwd(), '.env');
+loadDotenv(dirEnv ? { path: join(dirEnv, '.env'), quiet: true } : { quiet: true });
+
+/**
+ * Raíz del monorepo (donde vive `material/`), ubicada por `pnpm-workspace.yaml`
+ * en vez de por el `.env` porque en Vercel no hay `.env` —las env vars las
+ * inyecta la plataforma— pero el checkout del repo sí incluye ese archivo.
+ */
+export const RAIZ_MONOREPO =
+  buscarAncestro(process.cwd(), 'pnpm-workspace.yaml') ?? dirEnv ?? process.cwd();
 
 const envSchema = z.object({
   NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
@@ -51,6 +60,18 @@ const envSchema = z.object({
 
   // Telegram
   TELEGRAM_BOT_TOKEN: z.string().optional(),
+  /**
+   * URL pública HTTPS del webhook. Si se configura, el bot recibe los updates
+   * de Telegram por webhook en vez de long polling. Sin esto, long polling
+   * (el comportamiento de siempre).
+   */
+  TELEGRAM_WEBHOOK_URL: z.url().optional(),
+  /** Puerto local donde escuchar el webhook. Telegram solo acepta 443, 80, 88 u 8443. */
+  TELEGRAM_WEBHOOK_PORT: z.coerce.number().int().positive().default(8443),
+  /** Valida que los updates recibidos por webhook vengan realmente de Telegram. */
+  TELEGRAM_WEBHOOK_SECRET: z.string().optional(),
+  /** URL pública (Vercel) de la Mini App. Sin esto no se ofrece el botón para abrirla. */
+  WEB_APP_URL: z.url().optional(),
 
   // Scrapper: sistema de reserva de salas (MRBS) de la Facultad
   SCRAPPER_BASE_URL: z.url().default('https://salas.fi.mdp.edu.ar/index.php'),

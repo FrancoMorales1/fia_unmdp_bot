@@ -4,6 +4,13 @@ export interface FragmentoContexto {
   url: string;
   contenido: string;
   archivo?: { ruta: string; nombre: string };
+  /**
+   * El documento original en base64, para mandárselo a Gemini como PDF nativo
+   * en vez de solo el texto extraído en `contenido`. Gemini lee tablas y
+   * layout mejor así que de un texto plano, y cobra un costo fijo por página
+   * (no por cantidad de texto).
+   */
+  archivoPdf?: { datos: string; mimeType: string };
 }
 
 /** Todo lo que la IA necesita para responder: la consulta natural + contexto de la BBDD. */

@@ -5,6 +5,7 @@ import {
   construirPromptDeMateria,
   extraerFuentes,
   MAX_CARACTERES_POR_DOCUMENTO,
+  partesDeArchivos,
 } from './prompt.js';
 
 import type { ConsultaIA } from './types.js';
@@ -56,6 +57,53 @@ describe('construirPrompt', () => {
 
     expect(prompt).not.toContain('x'.repeat(MAX_CARACTERES_POR_DOCUMENTO + 1));
     expect(prompt).toContain('x'.repeat(MAX_CARACTERES_POR_DOCUMENTO));
+  });
+
+  it('avisa que el PDF va adjunto en vez de volcar el contenido de texto', () => {
+    const prompt = construirPrompt({
+      ...consultaBase,
+      documentos: [
+        {
+          titulo: 'Plan de Informática',
+          url: 'https://fi.mdp.edu.ar',
+          contenido: 'este texto no debería aparecer en el prompt',
+          archivoPdf: { datos: 'ZmFrZQ==', mimeType: 'application/pdf' },
+        },
+      ],
+    });
+
+    expect(prompt).toContain('[1] Plan de Informática');
+    expect(prompt).toContain('adjunto');
+    expect(prompt).not.toContain('este texto no debería aparecer en el prompt');
+  });
+});
+
+describe('partesDeArchivos', () => {
+  it('devuelve una parte inline por cada documento con PDF', () => {
+    const partes = partesDeArchivos([
+      {
+        titulo: 'a',
+        url: 'https://x',
+        contenido: '',
+        archivoPdf: { datos: 'AAA=', mimeType: 'application/pdf' },
+      },
+      { titulo: 'b', url: 'https://x', contenido: 'texto sin PDF' },
+      {
+        titulo: 'c',
+        url: 'https://x',
+        contenido: '',
+        archivoPdf: { datos: 'BBB=', mimeType: 'application/pdf' },
+      },
+    ]);
+
+    expect(partes).toEqual([
+      { inlineData: { mimeType: 'application/pdf', data: 'AAA=' } },
+      { inlineData: { mimeType: 'application/pdf', data: 'BBB=' } },
+    ]);
+  });
+
+  it('devuelve vacío si ningún documento tiene PDF', () => {
+    expect(partesDeArchivos([{ titulo: 'a', url: 'https://x', contenido: 'texto' }])).toEqual([]);
   });
 });
 

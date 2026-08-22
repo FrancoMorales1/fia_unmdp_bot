@@ -1,7 +1,7 @@
 import { readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
 
+import { RAIZ_MONOREPO } from '@fi/core';
 import { db, FTS } from '@fi/db';
 import { fechaEnZona, nombreDiaSemana, sumarDias } from '@fi/scrapper';
 import { sql } from 'drizzle-orm';
@@ -255,35 +255,28 @@ async function buscarHorarios(
 
 // ── Material: archivos leídos directo del disco ─────────────────────────────────
 
-const MATERIAL_DIR = fileURLToPath(new URL('../../../material/', import.meta.url));
+const MATERIAL_DIR = resolve(RAIZ_MONOREPO, 'material');
 
-/** Import dinámico: pdf-parse solo se necesita para calendario y planes de estudio. */
-async function parsearPdf(datos: Buffer): Promise<string> {
-  const { PDFParse } = await import('pdf-parse');
-  const parser = new PDFParse({ data: datos });
-  try {
-    const resultado = await parser.getText();
-    return resultado.text;
-  } finally {
-    await parser.destroy();
-  }
-}
+const MIME_PDF = 'application/pdf';
 
 /**
- * Texto de un PDF, cacheado en memoria por ruta absoluta: los archivos de
+ * PDF en base64, cacheado en memoria por ruta absoluta: los archivos de
  * material/ no cambian mientras el proceso corre, así que no tiene sentido
- * volver a leerlos y parsearlos en cada pregunta. Se cachea la promesa, no el
- * resultado, para que dos pedidos concurrentes al mismo archivo no disparen
- * dos parseos en paralelo.
+ * volver a leerlos en cada pregunta. Se cachea la promesa, no el resultado,
+ * para que dos pedidos concurrentes al mismo archivo no disparen dos lecturas
+ * en paralelo.
+ *
+ * Se manda el PDF entero, no el texto extraído: Gemini lo lee nativo (tablas,
+ * columnas, layout) en vez de depender de una extracción de texto plano que
+ * aplana justo lo que hace falta —créditos y correlativas en una tabla— para
+ * responder bien.
  */
 const cachePdf = new Map<string, Promise<string>>();
 
-function textoDePdf(rutaAbsoluta: string): Promise<string> {
+function pdfBase64(rutaAbsoluta: string): Promise<string> {
   let promesa = cachePdf.get(rutaAbsoluta);
   if (!promesa) {
-    promesa = readFile(rutaAbsoluta)
-      .then(parsearPdf)
-      .then((texto) => texto.trim());
+    promesa = readFile(rutaAbsoluta).then((datos) => datos.toString('base64'));
     cachePdf.set(rutaAbsoluta, promesa);
   }
   return promesa;
@@ -297,14 +290,15 @@ export async function obtenerPlanDeEstudio(etiqueta: string): Promise<FragmentoC
   if (!fila) return [];
 
   const ruta = resolve(MATERIAL_DIR, 'Plan de estudios', fila.archivo);
-  const contenido = await textoDePdf(ruta);
+  const datos = await pdfBase64(ruta);
 
   return [
     {
       titulo: etiqueta,
       url: FUENTE_FACULTAD,
-      contenido,
+      contenido: etiqueta,
       archivo: { ruta, nombre: fila.archivo },
+      archivoPdf: { datos, mimeType: MIME_PDF },
     },
   ];
 }
@@ -320,8 +314,9 @@ export function obtenerContenidoCalendario(): Promise<FragmentoContexto> {
     return {
       titulo: 'Calendario académico 2026',
       url: FUENTE_FACULTAD,
-      contenido: await textoDePdf(ruta),
+      contenido: 'Calendario académico 2026',
       archivo: { ruta, nombre: CALENDARIO_ARCHIVO },
+      archivoPdf: { datos: await pdfBase64(ruta), mimeType: MIME_PDF },
     };
   })();
   return calendarioCache;

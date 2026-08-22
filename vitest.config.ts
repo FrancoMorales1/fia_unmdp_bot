@@ -18,8 +18,8 @@ export default defineConfig({
         // (WhatsApp, Gemini, Chromium, Postgres, Redis). Se cubren con tests
         // de integración, no unitarios; medirlos acá solo diluye el número.
         'apps/bot/src/main.ts',
-        'apps/bot/src/contexto.ts',
         'apps/bot/src/scraping.ts',
+        'packages/contexto/src/contexto.ts',
         'packages/ai/src/gemini.ts',
         'packages/core/src/env.ts',
         'packages/core/src/logger.ts',

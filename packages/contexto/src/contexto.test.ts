@@ -53,7 +53,7 @@ describe('obtenerPlanDeEstudio', () => {
     await expect(obtenerPlanDeEstudio('carrera que no existe (Plan 3000)')).resolves.toEqual([]);
   });
 
-  it('lee y adjunta el PDF del plan encontrado', async () => {
+  it('adjunta el PDF nativo del plan encontrado, en base64', async () => {
     execute.mockResolvedValueOnce({
       rows: [{ archivo: 'PLAN 2024 - INFORMATICA.pdf' }],
     });
@@ -61,8 +61,10 @@ describe('obtenerPlanDeEstudio', () => {
     const [fragmento] = await obtenerPlanDeEstudio('Ingeniería en Informática (Plan 2024)');
 
     expect(fragmento?.titulo).toBe('Ingeniería en Informática (Plan 2024)');
-    expect(fragmento?.contenido.length).toBeGreaterThan(0);
     expect(fragmento?.archivo?.nombre).toBe('PLAN 2024 - INFORMATICA.pdf');
+    expect(fragmento?.archivoPdf?.mimeType).toBe('application/pdf');
+    // "%PDF" en base64: confirma que es el PDF de verdad, no un placeholder.
+    expect(fragmento?.archivoPdf?.datos.startsWith('JVBERi0')).toBe(true);
   });
 });
 
@@ -84,15 +86,16 @@ describe('obtenerContenidoFacultad', () => {
 });
 
 describe('obtenerContenidoCalendario', () => {
-  it('lee y parsea el PDF del calendario académico', async () => {
+  it('adjunta el PDF nativo del calendario académico, en base64', async () => {
     const fragmento = await obtenerContenidoCalendario();
 
     expect(fragmento.titulo).toBe('Calendario académico 2026');
-    expect(fragmento.contenido.length).toBeGreaterThan(0);
     expect(fragmento.archivo?.nombre).toBe('CALENDARIO ACADEMICO 2026.pdf');
+    expect(fragmento.archivoPdf?.mimeType).toBe('application/pdf');
+    expect(fragmento.archivoPdf?.datos.startsWith('JVBERi0')).toBe(true);
   });
 
-  it('cachea el texto parseado: la segunda llamada no vuelve a parsear el PDF', () => {
+  it('cachea el PDF: la segunda llamada no vuelve a leer el archivo', () => {
     const primera = obtenerContenidoCalendario();
     const segunda = obtenerContenidoCalendario();
 

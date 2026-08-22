@@ -79,6 +79,12 @@ function renderDocumentos(documentos: FragmentoContexto[]): string {
 
   return documentos
     .map((doc, i) => {
+      if (doc.archivoPdf) {
+        return (
+          `[${String(i + 1)}] ${doc.titulo}\nFuente: ${doc.url}\n` +
+          '(El documento completo va adjunto a este mensaje como PDF: usalo como fuente principal.)'
+        );
+      }
       const contenido = doc.contenido.slice(0, MAX_CARACTERES_POR_DOCUMENTO);
       return `[${String(i + 1)}] ${doc.titulo}\nFuente: ${doc.url}\n${contenido}`;
     })
@@ -96,6 +102,28 @@ export function construirPrompt(consulta: ConsultaIA): string {
     '## CONSULTA ACTUAL',
     consulta.mensaje,
   ].join('\n');
+}
+
+/** Una parte de contenido inline (PDF, imagen) para el request a Gemini. */
+export interface ParteDeArchivo {
+  inlineData: { mimeType: string; data: string };
+}
+
+/**
+ * Los PDFs que se adjuntan nativos, como partes aparte del prompt de texto.
+ * Función pura: no toca disco ni la API, solo mapea lo que ya viene armado en
+ * `FragmentoContexto.archivoPdf`.
+ */
+export function partesDeArchivos(documentos: FragmentoContexto[]): ParteDeArchivo[] {
+  const partes: ParteDeArchivo[] = [];
+  for (const doc of documentos) {
+    if (doc.archivoPdf) {
+      partes.push({
+        inlineData: { mimeType: doc.archivoPdf.mimeType, data: doc.archivoPdf.datos },
+      });
+    }
+  }
+  return partes;
 }
 
 export function extraerFuentes(documentos: FragmentoContexto[]): string[] {

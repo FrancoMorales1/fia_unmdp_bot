@@ -6,6 +6,7 @@ import {
   construirPromptDeMateria,
   extraerFuentes,
   INSTRUCCION_MATERIA,
+  partesDeArchivos,
 } from './prompt.js';
 
 import type { ConsultaDeMateria, ConsultaIA, ProveedorIA, RespuestaIA } from './types.js';
@@ -48,12 +49,15 @@ export function crearProveedorGemini(
 
   return {
     async responder(consulta: ConsultaIA): Promise<RespuestaIA> {
-      const prompt = construirPrompt(consulta);
+      // Los documentos con PDF nativo (calendario, planes de estudio) van como
+      // partes aparte del prompt de texto: Gemini los lee directo, con tablas
+      // y layout, en vez de depender de texto ya extraído.
+      const contents = [construirPrompt(consulta), ...partesDeArchivos(consulta.documentos)];
 
       try {
         const respuesta = await cliente.models.generateContent({
           model: modelo,
-          contents: prompt,
+          contents,
           config: {
             systemInstruction: consulta.instruccionSistema,
             temperature: 0.2,

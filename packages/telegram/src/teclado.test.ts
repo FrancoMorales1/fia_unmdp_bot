@@ -41,4 +41,23 @@ describe('marcadoDeRespuesta', () => {
   it('no manda reply_markup si la respuesta es solo texto', () => {
     expect(marcadoDeRespuesta({ texto: 'Listo' })).toBeUndefined();
   });
+
+  it('la opción con abrirWebApp se dibuja como botón de Mini App, no callback', () => {
+    const marcado = marcadoDeRespuesta({
+      texto: 'Elegí',
+      opciones: [
+        { id: 'opcion:1', etiqueta: 'Horarios' },
+        {
+          id: 'opcion:web',
+          etiqueta: 'Abrir menú interactivo',
+          abrirWebApp: 'https://x.vercel.app',
+        },
+      ],
+    });
+
+    expect((marcado as InlineKeyboard).inline_keyboard).toEqual([
+      [{ text: 'Horarios', callback_data: 'opcion:1' }],
+      [{ text: 'Abrir menú interactivo', web_app: { url: 'https://x.vercel.app' } }],
+    ]);
+  });
 });

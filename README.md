@@ -29,19 +29,23 @@ Telegram ─┘                └──▶ @fi/ai ──▶ Gemini ──▶ re
 
 ## Estructura
 
-| Package        | Rol                                                       |
-| -------------- | --------------------------------------------------------- |
-| `apps/bot`     | Orquestador: cablea los submódulos y programa el scraping |
-| `@fi/whatsapp` | Conexión Baileys, recepción y envío de mensajes           |
-| `@fi/telegram` | Conexión grammy: menú de botones y celdas de texto        |
-| `@fi/ai`       | Armado del prompt y consulta a Gemini                     |
-| `@fi/scrapper` | Lectura de la grilla de MRBS y persistencia de horarios   |
-| `@fi/db`       | Esquema Drizzle y acceso a Postgres                       |
-| `@fi/queue`    | Colas BullMQ sobre Redis (el cron diario)                 |
-| `@fi/core`     | Config validada, logger y errores compartidos             |
+| Package        | Rol                                                                 |
+| -------------- | ------------------------------------------------------------------- |
+| `apps/bot`     | Orquestador: cablea los submódulos y programa el scraping           |
+| `apps/web`     | Mini App de Telegram (Next.js): el mismo menú, sin llenar el chat   |
+| `@fi/whatsapp` | Conexión Baileys, recepción y envío de mensajes                     |
+| `@fi/telegram` | Conexión grammy: menú de botones y celdas de texto                  |
+| `@fi/ai`       | Armado del prompt y consulta a Gemini                               |
+| `@fi/contexto` | Base de conocimiento: horarios, calendario, planes de estudio, info |
+| `@fi/scrapper` | Lectura de la grilla de MRBS y persistencia de horarios             |
+| `@fi/db`       | Esquema Drizzle y acceso a Postgres                                 |
+| `@fi/queue`    | Colas BullMQ sobre Redis (el cron diario)                           |
+| `@fi/core`     | Config validada, logger y errores compartidos                       |
 
 Los tres submódulos del enunciado son **WhatsApp**, **IA** y **Scrapper**; `db`,
-`queue` y `core` existen para que esos tres no se pisen entre sí.
+`queue` y `core` existen para que esos tres no se pisen entre sí. `contexto` es
+lo que antes vivía adentro de `apps/bot`, separado a su propio package para
+que tanto el bot como `apps/web` usen exactamente la misma lógica.
 
 ## Stack
 
@@ -68,6 +72,65 @@ gestionado hay que habilitarlas desde el panel).
 
 Para responder por Telegram hace falta `TELEGRAM_BOT_TOKEN` (lo da @BotFather).
 Sin token el bot arranca igual y responde solo por WhatsApp.
+
+### Telegram por webhook (en vez de polling)
+
+Por defecto Telegram funciona por _long polling_: el bot le pregunta a
+Telegram "¿hay mensajes nuevos?" en loop. Configurando `TELEGRAM_WEBHOOK_URL`
+pasa a webhook: Telegram le manda los updates directo al bot por HTTP, apenas
+llegan. Menos latencia y menos carga, pero el bot necesita quedar expuesto en
+una URL pública HTTPS.
+
+**1. Elegí puerto y armá un secreto.** Telegram solo acepta los puertos `443`,
+`80`, `88` u `8443` para webhooks — cualquier otro lo rechaza. El secreto es
+para que el endpoint verifique que el request vino de Telegram de verdad, no
+de cualquiera que le pegue a la URL:
+
+```bash
+openssl rand -hex 24   # o cualquier string random largo
+```
+
+**2. Completá en `.env`:**
+
+```bash
+TELEGRAM_WEBHOOK_URL=https://tu-dominio.com/telegram-webhook
+TELEGRAM_WEBHOOK_PORT=8443
+TELEGRAM_WEBHOOK_SECRET=el-string-random-del-paso-1
+```
+
+La `URL` es lo que Telegram necesita poder resolver desde internet; el
+`PUERTO` es donde el proceso del bot escucha _localmente_ — casi siempre van
+a ser distintos, porque en el medio hay un proxy/túnel terminando TLS y
+reenviando al puerto local.
+
+**3. Exponé el puerto local con HTTPS.** El bot mismo no maneja TLS, así que
+hace falta algo delante:
+
+- **Para probar** (dev, sin dominio propio): un túnel tipo
+  [ngrok](https://ngrok.com/) — `ngrok http 8443` te da una URL HTTPS pública
+  al toque, apuntá `TELEGRAM_WEBHOOK_URL` a esa URL + `/telegram-webhook`.
+- **Para producción** (con dominio propio): un reverse proxy con TLS
+  automático delante del bot — [Caddy](https://caddyserver.com/) es el más
+  simple (`reverse_proxy localhost:8443` y listo, certificado solo). nginx +
+  certbot funciona igual, pero es más para armar a mano.
+
+**4. Arrancá el bot normal** (`pnpm dev` o `pnpm start`). Al conectar, llama a
+`setWebhook` con esa URL y queda escuchando en el puerto local — el log dice
+`Conectado a Telegram (webhook)` en vez de `(polling)`.
+
+**Para volver a polling**: vaciar `TELEGRAM_WEBHOOK_URL` en el `.env` y
+reiniciar. El cliente llama a `deleteWebhook` al desconectar prolijamente
+(`Ctrl+C`), pero si el proceso muere de golpe capaz hay que borrarlo a mano:
+
+```bash
+curl "https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/deleteWebhook"
+```
+
+Se puede confirmar el estado actual del webhook (o que no hay ninguno) con:
+
+```bash
+curl "https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/getWebhookInfo"
+```
 
 ### Telegram no responde en WSL2
 
@@ -207,6 +270,45 @@ guardar estado y el flujo sobrevive a un reinicio. Como red de contención, el
 En **WhatsApp** no hay botones: `aTextoPlano` aplana la misma respuesta a la
 lista numerada de siempre. El bot decide _qué_ ofrecer; cada canal decide cómo
 lo dibuja.
+
+Con `WEB_APP_URL` configurada, en Telegram aparece además un botón "📱 Abrir
+menú interactivo" que abre `apps/web` como Mini App — mismo menú, pero dentro
+de un WebView en vez de mensajes nuevos en el chat. Sin esa variable el botón
+no se ofrece (así en dev local, sin URL pública, no queda un botón roto).
+
+## Mini App (`apps/web`)
+
+Next.js (App Router), pensada para vivir en Vercel. Una sola página con
+estado de React (menú → horarios/calendario/facultad o carrera → versión →
+consulta para plan de estudios) que le pega directo a `@fi/contexto` y
+`@fi/ai` desde sus propias API routes — no pasa por `apps/bot` para nada.
+
+```bash
+pnpm build                    # los @fi/* se consumen ya compilados (dist/)
+pnpm --filter @fi/web dev     # http://localhost:3000
+```
+
+Cada request a `/api/consultar` valida el `initData` que manda el WebView de
+Telegram (HMAC-SHA256 con `TELEGRAM_BOT_TOKEN`, documentado en
+[core.telegram.org/bots/webapps](https://core.telegram.org/bots/webapps#validating-data-received-via-the-mini-app))
+y aplica el mismo rate limit por usuario que ya tiene `apps/bot`. Sin eso,
+cualquiera en internet podría pegarle al endpoint y gastar cuota de Gemini.
+
+Para probarla de verdad hace falta abrirla dentro de Telegram, lo que exige
+HTTPS pública (un preview de Vercel, o un túnel tipo ngrok apuntando a
+`next dev` en local).
+
+**Deploy**: Root Directory del proyecto de Vercel = `apps/web`. Env vars:
+`DATABASE_URL`, `GEMINI_API_KEY`, `GEMINI_MODEL`, `TELEGRAM_BOT_TOKEN`.
+Importante: `DATABASE_URL` tiene que apuntar a una Postgres alcanzable desde
+internet (Supabase u otra) — el Postgres de Docker local no sirve una vez
+deployado. Después de deployar, setear `WEB_APP_URL` con la URL de Vercel
+para que aparezca el botón en el chat.
+
+WhatsApp y el long polling de Telegram **no entran en este deploy**: los dos
+necesitan un proceso corriendo 24/7, algo que Vercel (o cualquier proveedor
+serverless) no ofrece. `apps/bot` sigue corriendo donde corre hoy; la Mini
+App es una superficie nueva, no un reemplazo.
 
 ## Convenciones
 

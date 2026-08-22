@@ -7,6 +7,10 @@ dist/
 build/
 *.tsbuildinfo
 
+# Next.js (apps/web)
+.next/
+next-env.d.ts
+
 # tests
 coverage/
 .vitest-reports/

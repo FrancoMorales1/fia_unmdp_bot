@@ -1,0 +1,28 @@
+{
+  "name": "@fi/web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Mini App de Telegram: menú interactivo de horarios, calendario, plan de estudios e información de la facultad",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint app src",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@fi/ai": "workspace:*",
+    "@fi/contexto": "workspace:*",
+    "@fi/core": "workspace:*",
+    "next": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "typescript": "catalog:"
+  }
+}

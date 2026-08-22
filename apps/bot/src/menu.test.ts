@@ -1,5 +1,6 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
+import type * as FiCore from '@fi/core';
 import type { MensajeEntrante } from '@fi/core';
 
 import {
@@ -154,6 +155,27 @@ describe('menuInicial', () => {
       'opcion:3',
       'opcion:4',
     ]);
+  });
+
+  it('agrega el botón de la Mini App solo si WEB_APP_URL está configurada', async () => {
+    vi.resetModules();
+    vi.doMock('@fi/core', async () => {
+      const real = await vi.importActual<typeof FiCore>('@fi/core');
+      return { ...real, env: { ...real.env, WEB_APP_URL: 'https://x.vercel.app' } };
+    });
+
+    const { menuInicial: menuInicialConWebApp } = await import('./menu.js');
+    const menu = menuInicialConWebApp('Franco');
+
+    expect(menu.opciones).toHaveLength(5);
+    expect(menu.opciones?.at(-1)).toEqual({
+      id: 'opcion:web',
+      etiqueta: '📱 Abrir menú interactivo',
+      abrirWebApp: 'https://x.vercel.app',
+    });
+
+    vi.doUnmock('@fi/core');
+    vi.resetModules();
   });
 });
 

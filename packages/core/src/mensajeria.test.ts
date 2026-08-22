@@ -32,4 +32,29 @@ describe('aTextoPlano', () => {
   it('no agrega nada cuando la salida es solo texto', () => {
     expect(aTextoPlano({ texto: 'Listo' })).toBe('Listo');
   });
+
+  it('descarta las opciones que abren una Mini App: no sirven por WhatsApp', () => {
+    const plano = aTextoPlano({
+      texto: '¿Sobre qué querés consultar?',
+      opciones: [
+        { id: 'opcion:1', etiqueta: 'Horarios', atajo: '1' },
+        {
+          id: 'opcion:web',
+          etiqueta: 'Abrir menú interactivo',
+          abrirWebApp: 'https://x.vercel.app',
+        },
+      ],
+    });
+
+    expect(plano).toBe('¿Sobre qué querés consultar?\n\n1 - Horarios');
+  });
+
+  it('si solo queda una opción de Mini App, no lista nada', () => {
+    const plano = aTextoPlano({
+      texto: 'Elegí una opción.',
+      opciones: [{ id: 'opcion:web', etiqueta: 'Abrir menú', abrirWebApp: 'https://x.vercel.app' }],
+    });
+
+    expect(plano).toBe('Elegí una opción.');
+  });
 });

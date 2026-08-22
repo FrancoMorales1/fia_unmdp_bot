@@ -1,4 +1,4 @@
-export { env, isProduction, isTest, type Env } from './env.js';
+export { env, isProduction, isTest, RAIZ_MONOREPO, type Env } from './env.js';
 export { logger, createLogger, type Logger } from './logger.js';
 export {
   AppError,
