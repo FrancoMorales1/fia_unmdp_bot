@@ -47,6 +47,33 @@ services:
       timeout: 5s
       retries: 5
 
+  bot:
+    build:
+      context: .
+      dockerfile: apps/bot/Dockerfile
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      # Adentro de la red de compose se habla por nombre de servicio, no por
+      # localhost ni por el puerto remapeado del host (p. ej. 6380).
+      DATABASE_URL: postgres://fi:fi@postgres:5432/fi_bot
+      REDIS_URL: redis://redis:6379
+    volumes:
+      # `material/` no viaja en la imagen (el Dockerfile solo empaqueta
+      # packages/apps): sin este mount, calendario/planes/facultad/ingreso
+      # fallan con ENOENT.
+      - ./material:/app/material:ro
+      # Sesión de WhatsApp (Baileys): sin este volumen, cada `docker compose
+      # up --build` pide escanear el QR de nuevo.
+      - ./.auth:/app/.auth
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      db-seed:
+        condition: service_completed_successfully
+
 volumes:
   postgres-data:
   redis-data:

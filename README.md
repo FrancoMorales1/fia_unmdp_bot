@@ -94,6 +94,30 @@ de que `dotenv` cargue el `.env` dentro del proceso ya corriendo.
 
 Requisitos: Node >= 24 (`nvm use`), pnpm >= 10, Docker.
 
+### El bot también corre en Docker (opcional)
+
+Para no depender de `pnpm dev` corriendo en una terminal, `docker-compose.yml`
+tiene un servicio `bot` (usa [apps/bot/Dockerfile](apps/bot/Dockerfile), que ya
+existía pero no estaba enchufado a nada):
+
+```bash
+docker compose up -d --build bot   # primera vez, o después de cambiar código
+docker compose logs -f bot         # para escanear el QR de WhatsApp
+docker compose stop bot            # bajarlo
+docker compose start bot           # volver a subirlo (sin rebuildear)
+```
+
+Dentro de la red de compose el bot habla con `postgres`/`redis` por nombre de
+servicio, no por `localhost` — no hace falta tocar el `.env` para esto, el
+servicio pisa `DATABASE_URL`/`REDIS_URL` solo. `material/` y `.auth/` quedan
+montados como volúmenes desde el host: la sesión de WhatsApp sobrevive a un
+rebuild, y el contenedor ve el mismo `material/` que usás en local.
+
+Contrapartida: no hay hot-reload acá (a diferencia de `tsx watch` en
+`pnpm dev`) — cada cambio de código pide `docker compose up -d --build bot`
+de nuevo. Para iterar rápido conviene seguir con `pnpm dev`; el contenedor
+sirve para dejarlo prendido sin depender de una terminal abierta.
+
 ## Comandos
 
 | Comando              | Qué hace                                       |
