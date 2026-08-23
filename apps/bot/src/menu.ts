@@ -1,49 +1,16 @@
 import type { MensajeEntrante, OpcionMenu, RespuestaSalida } from '@fi/core';
 
+import {
+  DEFINICIONES_OPCIONES as DEFINICIONES,
+  TEXTO_ELEGIR_CARRERA,
+  TEXTO_ELEGIR_PLAN,
+  TEXTO_MATERIAS_ENCONTRADAS,
+  textoMenuInicial,
+  textoPedidoDeConsulta,
+  type DefinicionOpcion,
+} from './textos.js';
+
 export type NumeroOpcion = 1 | 2 | 3 | 4 | 5;
-
-interface DefinicionOpcion {
-  numero: NumeroOpcion;
-  /** Lo que se lee en el botón. También es la primera línea del pedido de texto. */
-  etiqueta: string;
-  /** Qué se le pide que escriba al alumno después de elegir la opción. */
-  pedido: string;
-  /** Texto gris dentro de la celda de Telegram. */
-  placeholder: string;
-}
-
-const DEFINICIONES = {
-  1: {
-    numero: 1,
-    etiqueta: '📅 Horarios de cursadas',
-    pedido: '¿De qué materia querés el horario?',
-    placeholder: 'Ej: análisis matemático I',
-  },
-  2: {
-    numero: 2,
-    etiqueta: '🗓️ Calendario académico 2026',
-    pedido: '¿Qué fecha o trámite estás buscando?',
-    placeholder: 'Ej: inscripción a finales',
-  },
-  3: {
-    numero: 3,
-    etiqueta: '📚 Plan de estudios',
-    pedido: '¿De qué carrera o materia?',
-    placeholder: 'Ej: ingeniería en informática',
-  },
-  4: {
-    numero: 4,
-    etiqueta: 'ℹ️ Información de la facultad',
-    pedido: '¿Qué necesitás saber?',
-    placeholder: 'Ej: horarios de la biblioteca',
-  },
-  5: {
-    numero: 5,
-    etiqueta: '🎓 Ingreso a Ingeniería 2027',
-    pedido: '¿Qué necesitás saber sobre el ingreso?',
-    placeholder: 'Ej: cómo me inscribo al SIFI',
-  },
-} as const satisfies Record<NumeroOpcion, DefinicionOpcion>;
 
 export const OPCIONES: readonly DefinicionOpcion[] = Object.values(DEFINICIONES);
 
@@ -75,12 +42,8 @@ function botones(): OpcionMenu[] {
 
 /** El menú: botones en Telegram, lista numerada en WhatsApp. */
 export function menuInicial(nombre?: string): RespuestaSalida {
-  const saludo = nombre ? `¡Hola, ${nombre}!` : '¡Hola!';
-
   return {
-    texto:
-      `${saludo} Soy el asistente de la Facultad de Ingeniería (UNMdP).\n\n` +
-      '¿Sobre qué querés consultar?',
+    texto: textoMenuInicial(nombre),
     opciones: botones(),
   };
 }
@@ -92,12 +55,10 @@ export function menuInicial(nombre?: string): RespuestaSalida {
  * cuando llega la respuesta.
  */
 export function pedidoDeConsulta(numero: NumeroOpcion): RespuestaSalida {
-  const { etiqueta, pedido, placeholder } = DEFINICIONES[numero];
+  const { etiqueta, pedido, placeholder, pista } = DEFINICIONES[numero];
 
   return {
-    texto:
-      `${etiqueta}\n\n${pedido}\n\n` +
-      'Escribilo acá abajo. Si querés ver todo sin filtrar, mandá un guión: -',
+    texto: textoPedidoDeConsulta(etiqueta, pedido, pista),
     pedirTexto: { placeholder },
   };
 }
@@ -119,7 +80,7 @@ function indiceDeOpcion(mensaje: MensajeEntrante, prefijo: string): number {
 
 export function opcionesDeCarreras(carreras: string[]): RespuestaSalida {
   return {
-    texto: 'Elegí la carrera:',
+    texto: TEXTO_ELEGIR_CARRERA,
     opciones: carreras.map((carrera, indice) => ({
       id: `${PREFIJO_CARRERA}${indice + 1}`,
       etiqueta: carrera,
@@ -138,7 +99,7 @@ export function carreraElegida(mensaje: MensajeEntrante, carreras: string[] | nu
 
 export function opcionesDePlanes(planes: string[]): RespuestaSalida {
   return {
-    texto: 'Elegí el plan de estudios:',
+    texto: TEXTO_ELEGIR_PLAN,
     opciones: planes.map((plan, indice) => ({
       id: `${PREFIJO_PLAN}${indice + 1}`,
       etiqueta: plan,
@@ -157,7 +118,7 @@ export function planElegido(mensaje: MensajeEntrante, planes: string[] | null): 
 
 export function opcionesDeMaterias(materias: string[]): RespuestaSalida {
   return {
-    texto: 'Encontré varias materias posibles. Elegí una para ver sus horarios:',
+    texto: TEXTO_MATERIAS_ENCONTRADAS,
     opciones: materias.map((materia, indice) => ({
       id: `${PREFIJO_MATERIA}${indice + 1}`,
       etiqueta: materia,
@@ -196,19 +157,25 @@ const PALABRAS_DE_MENU = new Set([
   'volver',
   'inicio',
   'ayuda',
+  // Forma consistente de "no era esto, volvé al menú" en cualquier opción.
+  '-',
 ]);
-
-/** Formas de decir "no filtres nada, mostrame todo". */
-const SIN_FILTRO = new Set(['-', '.', '*', 'todo', 'todos', 'todas', 'ver todo', 'nada']);
 
 export function pideMenu(texto: string): boolean {
   return PALABRAS_DE_MENU.has(texto.trim().toLowerCase());
 }
 
-/** Deja la consulta lista para buscar: vacía significa "sin filtro". */
+/**
+ * "todo" pide la información completa sin pasar por la IA. Solo tiene efecto
+ * en las opciones que lo soportan (Información de la facultad e Ingreso a
+ * Ingeniería); en el resto se trata como texto de búsqueda normal.
+ */
+export function esPedidoDeTodo(consulta: string): boolean {
+  return consulta.trim().toLowerCase() === 'todo';
+}
+
 export function normalizarConsulta(texto: string): string {
-  const limpio = texto.trim();
-  return SIN_FILTRO.has(limpio.toLowerCase()) ? '' : limpio;
+  return texto.trim();
 }
 
 /**
@@ -246,15 +213,20 @@ export type Intencion =
  * Decide qué quiso hacer el usuario. El orden importa:
  *
  * 1. Apretó un botón → se le abre la celda de texto para que dé más contexto.
- * 2. Pidió el menú explícitamente → siempre gana, es la salida de emergencia.
+ * 2. Pidió el menú explícitamente (incluye "-", la forma consistente de
+ *    volver desde cualquier opción) → siempre gana, es la salida de
+ *    emergencia. Por eso corta acá y nunca llega a interpretarse como parte
+ *    de una consulta.
  * 3. Respondió a un pedido → el hilo dice el tema y el texto es la consulta.
- * 4. Escribió "2 algo" → protocolo de texto (WhatsApp y quien prefiera tipear).
+ * 4. Escribió "2 algo" → protocolo de texto, solo en canales sin botones
+ *    (WhatsApp). En Telegram la selección va siempre por menú.
  * 5. Ya había elegido tema hace poco → se sigue conversando sobre eso.
  * 6. Nada de lo anterior → menú.
  */
 export function interpretar(
   mensaje: MensajeEntrante,
   opcionRecordada: NumeroOpcion | null,
+  { protocoloDeTexto = true }: { protocoloDeTexto?: boolean } = {},
 ): Intencion {
   if (mensaje.opcionElegida) {
     const numero = opcionDesdeId(mensaje.opcionElegida);
@@ -271,8 +243,10 @@ export function interpretar(
     }
   }
 
-  const porTexto = parsearOpcion(mensaje.texto);
-  if (porTexto) return { tipo: 'consultar', ...porTexto };
+  if (protocoloDeTexto) {
+    const porTexto = parsearOpcion(mensaje.texto);
+    if (porTexto) return { tipo: 'consultar', ...porTexto };
+  }
 
   if (opcionRecordada && mensaje.texto.trim().length > 0) {
     return {

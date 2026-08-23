@@ -23,7 +23,3 @@ export function formatearRespuesta(respuesta: RespuestaIA): string {
 
   return texto + pie;
 }
-
-export const MENSAJE_ERROR =
-  'Uf, se me complicó procesar tu consulta. Probá de nuevo en un ratito, ' +
-  'o escribile directo a Alumnos de la Facultad de Ingeniería.';

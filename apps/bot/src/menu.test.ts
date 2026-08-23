@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import type { MensajeEntrante } from '@fi/core';
 
 import {
+  esPedidoDeTodo,
   interpretar,
   carreraElegida,
   mensajeParaIA,
@@ -66,13 +67,25 @@ describe('parsearOpcion', () => {
 });
 
 describe('normalizarConsulta', () => {
-  it('trata el guión como "sin filtro"', () => {
-    expect(normalizarConsulta('-')).toBe('');
-    expect(normalizarConsulta('  Todo ')).toBe('');
+  it('solo recorta espacios, no interpreta nada', () => {
+    expect(normalizarConsulta('  álgebra  ')).toBe('álgebra');
+    expect(normalizarConsulta('  Todo ')).toBe('Todo');
+    // "-" se resuelve como "menu" en interpretar(), antes de llegar acá.
+    expect(normalizarConsulta('-')).toBe('-');
+  });
+});
+
+describe('esPedidoDeTodo', () => {
+  it('reconoce "todo" sin importar mayúsculas ni espacios', () => {
+    expect(esPedidoDeTodo('todo')).toBe(true);
+    expect(esPedidoDeTodo('  Todo ')).toBe(true);
+    expect(esPedidoDeTodo('TODO')).toBe(true);
   });
 
-  it('deja el resto tal cual', () => {
-    expect(normalizarConsulta('  álgebra  ')).toBe('álgebra');
+  it('no confunde una consulta real con el pedido de todo', () => {
+    expect(esPedidoDeTodo('todo sobre finales')).toBe(false);
+    expect(esPedidoDeTodo('')).toBe(false);
+    expect(esPedidoDeTodo('-')).toBe(false);
   });
 });
 
@@ -110,13 +123,22 @@ describe('interpretar', () => {
     });
   });
 
-  it('el guión en la celda significa "sin filtrar"', () => {
+  it('"-" siempre vuelve al menú, sin importar qué pedido se esté respondiendo', () => {
     const pedido = pedidoDeConsulta(2).texto;
 
     expect(interpretar(entrante({ texto: '-', respondeA: pedido }), null)).toEqual({
+      tipo: 'menu',
+    });
+    expect(interpretar(entrante({ texto: '-' }), 1)).toEqual({ tipo: 'menu' });
+  });
+
+  it('"todo" no es un atajo de menú: llega como consulta normal', () => {
+    const pedido = pedidoDeConsulta(4).texto;
+
+    expect(interpretar(entrante({ texto: 'todo', respondeA: pedido }), null)).toEqual({
       tipo: 'consultar',
-      numero: 2,
-      consulta: '',
+      numero: 4,
+      consulta: 'todo',
     });
   });
 
@@ -134,6 +156,12 @@ describe('interpretar', () => {
       numero: 4,
       consulta: 'biblioteca',
     });
+  });
+
+  it('en Telegram no interpreta números sueltos: la selección va por menú', () => {
+    expect(
+      interpretar(entrante({ texto: '4 biblioteca' }), null, { protocoloDeTexto: false }),
+    ).toEqual({ tipo: 'menu' });
   });
 
   it('usa el último tema elegido cuando el mensaje llega suelto', () => {

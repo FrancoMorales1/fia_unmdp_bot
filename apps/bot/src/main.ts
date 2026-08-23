@@ -21,6 +21,7 @@ import {
   botonesDeSeguimiento,
   carreraElegida,
   COMANDOS,
+  esPedidoDeTodo,
   interpretar,
   materiaElegida,
   mensajeParaIA,
@@ -31,7 +32,7 @@ import {
   planElegido,
   pedidoDeConsulta,
 } from './menu.js';
-import { formatearRespuesta, MENSAJE_ERROR } from './respuesta.js';
+import { formatearRespuesta } from './respuesta.js';
 import { iniciarScraping } from './scraping.js';
 import {
   olvidarMaterias,
@@ -50,13 +51,23 @@ import {
   recordarPlanActivo,
   recordarOpcion,
 } from './sesion.js';
+import {
+  MENSAJE_ERROR,
+  MENSAJE_RATE_LIMIT,
+  MENSAJE_SIN_CARRERAS,
+  MENSAJE_SIN_PLANES_DE_CARRERA,
+  PLACEHOLDER_CALENDARIO,
+  PLACEHOLDER_CONSULTA_PLAN,
+  RESUMEN_FACULTAD,
+  TEXTO_CALENDARIO_SIN_FILTRO,
+  TEXTO_PEDIDO_CALENDARIO,
+  textoPlanElegido,
+  textoPlanSinFiltro,
+} from './textos.js';
 
 const log = createLogger('bot');
 
 const ia = crearProveedorGemini();
-
-const MENSAJE_RATE_LIMIT =
-  'Estás enviando muchos mensajes seguidos. Esperá un momento y volvé a consultar.';
 
 // Ventana deslizante en memoria: jid -> timestamps de mensajes recientes.
 const marcasPorJid = new Map<string, number[]>();
@@ -76,7 +87,27 @@ function excedeLimite(jid: string): boolean {
   return false;
 }
 
-async function responder(mensaje: MensajeEntrante): Promise<Salida> {
+/**
+ * Un doble tap manda dos callback_query casi simultáneos para el mismo
+ * botón — con updates procesándose en paralelo (ver @fi/telegram), cada uno
+ * dispara su propia ida y vuelta a Gemini y el alumno recibe la misma
+ * respuesta dos veces. Solo aplica a botones (no a texto libre: repetir la
+ * misma pregunta escrita puede ser intencional).
+ */
+const DEBOUNCE_BOTON_MS = 2_000;
+const ultimoBotonPorJid = new Map<string, { opcion: string; en: number }>();
+
+function esBotonDuplicado(mensaje: MensajeEntrante): boolean {
+  if (!mensaje.opcionElegida) return false;
+
+  const ahora = Date.now();
+  const anterior = ultimoBotonPorJid.get(mensaje.jid);
+  ultimoBotonPorJid.set(mensaje.jid, { opcion: mensaje.opcionElegida, en: ahora });
+
+  return anterior?.opcion === mensaje.opcionElegida && ahora - anterior.en < DEBOUNCE_BOTON_MS;
+}
+
+async function responder(mensaje: MensajeEntrante, plataforma: string): Promise<Salida> {
   if (excedeLimite(mensaje.jid)) {
     log.warn({ jid: mensaje.jid }, 'Rate limit alcanzado');
     return MENSAJE_RATE_LIMIT;
@@ -88,7 +119,7 @@ async function responder(mensaje: MensajeEntrante): Promise<Salida> {
 
   if (carrera) {
     const planes = await planesDeEstudio(carrera);
-    if (planes.length === 0) return { texto: 'No encontré planes para esa carrera.' };
+    if (planes.length === 0) return { texto: MENSAJE_SIN_PLANES_DE_CARRERA };
     olvidarCarreras(mensaje.jid);
     olvidarPlanActivo(mensaje.jid);
     recordarPlanes(mensaje.jid, planes);
@@ -104,15 +135,19 @@ async function responder(mensaje: MensajeEntrante): Promise<Salida> {
     recordarOpcion(mensaje.jid, 3);
     const documentos = await obtenerPlanDeEstudio(plan);
     return {
-      texto: `Plan de estudios: ${plan}.\n\n¿Sobre qué querés consultar? (créditos, correlativas, materias…)`,
+      texto: textoPlanElegido(plan),
       archivos: documentos.flatMap((documento) => (documento.archivo ? [documento.archivo] : [])),
-      pedirTexto: { placeholder: 'Ej: cuántos créditos vale una materia' },
+      pedirTexto: { placeholder: PLACEHOLDER_CONSULTA_PLAN },
     };
   }
 
+  // En Telegram la selección va siempre por menú (botones); el protocolo de
+  // texto ("2 algo") solo hace falta en WhatsApp, que no tiene botones.
   const intencion = materia
     ? { tipo: 'consultar' as const, numero: 1 as const, consulta: materia }
-    : interpretar(mensaje, opcionVigente(mensaje.jid));
+    : interpretar(mensaje, opcionVigente(mensaje.jid), {
+        protocoloDeTexto: plataforma !== 'telegram',
+      });
 
   if (intencion.tipo === 'menu') {
     olvidarMaterias(mensaje.jid);
@@ -130,17 +165,15 @@ async function responder(mensaje: MensajeEntrante): Promise<Salida> {
     if (intencion.numero === 2) {
       const documento = await obtenerContenidoCalendario();
       return {
-        texto:
-          '🗓️ Calendario académico 2026\n\n¿Qué fecha o trámite estás buscando? Si querés ' +
-          'ver todo, mandá un guión: -',
+        texto: TEXTO_PEDIDO_CALENDARIO,
         archivos: documento.archivo ? [documento.archivo] : [],
-        pedirTexto: { placeholder: 'Ej: inscripción a finales' },
+        pedirTexto: { placeholder: PLACEHOLDER_CALENDARIO },
       };
     }
 
     if (intencion.numero === 3) {
       const carreras = await carrerasDePlanes();
-      if (carreras.length === 0) return { texto: 'No encontré carreras con planes cargados.' };
+      if (carreras.length === 0) return { texto: MENSAJE_SIN_CARRERAS };
       recordarCarreras(mensaje.jid, carreras);
       return opcionesDeCarreras(carreras);
     }
@@ -155,12 +188,25 @@ async function responder(mensaje: MensajeEntrante): Promise<Salida> {
     const activo = planActivoVigente(mensaje.jid);
     if (!activo) {
       const carreras = await carrerasDePlanes();
-      if (carreras.length === 0) return { texto: 'No encontré carreras con planes cargados.' };
+      if (carreras.length === 0) return { texto: MENSAJE_SIN_CARRERAS };
       recordarCarreras(mensaje.jid, carreras);
       return opcionesDeCarreras(carreras);
     }
 
     recordarPlanActivo(mensaje.jid, activo); // renueva el TTL mientras siga preguntando
+
+    // Consulta vacía (p. ej. WhatsApp con solo "3", sin protocolo de botones):
+    // el PDF completo ya se mandó al elegir el plan, no hace falta gastar una
+    // consulta a la IA para repetir lo mismo. "-" no llega hasta acá: ya
+    // resolvió a "menu" en interpretar().
+    if (intencion.consulta === '') {
+      return {
+        texto: textoPlanSinFiltro(activo),
+        opciones: botonesDeSeguimiento(),
+        opcionesSoloEnBotones: true,
+      };
+    }
+
     const documentos = await obtenerPlanDeEstudio(activo);
     const respuesta = await ia.responder({
       mensaje: mensajeParaIA(intencion),
@@ -177,6 +223,37 @@ async function responder(mensaje: MensajeEntrante): Promise<Salida> {
     };
   }
 
+  // Consulta vacía en Calendario (p. ej. WhatsApp con solo "2"): el PDF
+  // completo ya se mandó al elegir la opción, no hace falta gastar una
+  // consulta a la IA para repetir lo mismo. "-" no llega hasta acá: ya
+  // resolvió a "menu" en interpretar().
+  if (intencion.numero === 2 && intencion.consulta === '') {
+    olvidarMaterias(mensaje.jid);
+    olvidarCarreras(mensaje.jid);
+    olvidarPlanes(mensaje.jid);
+    olvidarPlanActivo(mensaje.jid);
+    return {
+      texto: TEXTO_CALENDARIO_SIN_FILTRO,
+      opciones: botonesDeSeguimiento(),
+      opcionesSoloEnBotones: true,
+    };
+  }
+
+  // "todo" en Información de la facultad: se responde directo con lo más
+  // pedido, sin gastar una consulta a la IA. Es la única opción donde "todo"
+  // no necesita ni siquiera leer el documento completo.
+  if (intencion.numero === 4 && esPedidoDeTodo(intencion.consulta)) {
+    olvidarMaterias(mensaje.jid);
+    olvidarCarreras(mensaje.jid);
+    olvidarPlanes(mensaje.jid);
+    olvidarPlanActivo(mensaje.jid);
+    return {
+      texto: RESUMEN_FACULTAD,
+      opciones: botonesDeSeguimiento(),
+      opcionesSoloEnBotones: true,
+    };
+  }
+
   const documentos = await obtenerContextoDeOpcion(intencion.numero, intencion.consulta, ia);
   if (!Array.isArray(documentos)) {
     recordarMaterias(mensaje.jid, documentos.materias);
@@ -187,8 +264,16 @@ async function responder(mensaje: MensajeEntrante): Promise<Salida> {
   olvidarPlanes(mensaje.jid);
   olvidarPlanActivo(mensaje.jid);
 
+  // "todo" en Ingreso a Ingeniería: sí pasa por la IA (a diferencia de
+  // Información de la facultad), pero con la pregunta genérica de siempre en
+  // vez de preguntarle a Gemini "¿qué dice la guía sobre todo?".
+  const intencionParaIA =
+    intencion.numero === 5 && esPedidoDeTodo(intencion.consulta)
+      ? { ...intencion, consulta: '' }
+      : intencion;
+
   const respuesta = await ia.responder({
-    mensaje: mensajeParaIA(intencion),
+    mensaje: mensajeParaIA(intencionParaIA),
     documentos,
     instruccionSistema: instruccionParaOpcion(intencion.numero),
   });
@@ -219,8 +304,16 @@ function manejadorMensaje(plataforma: string) {
       'Solicitud recibida',
     );
 
+    if (esBotonDuplicado(mensaje)) {
+      log.warn(
+        { jid: mensaje.jid, plataforma, opcion: mensaje.opcionElegida },
+        'Botón duplicado ignorado (doble tap)',
+      );
+      return undefined;
+    }
+
     try {
-      return await responder(mensaje);
+      return await responder(mensaje, plataforma);
     } catch (error) {
       log.error({ err: error, jid: mensaje.jid, plataforma }, 'No se pudo responder');
       return MENSAJE_ERROR;
