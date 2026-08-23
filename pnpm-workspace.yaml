@@ -8,6 +8,7 @@ catalog:
   # --- runtime ---
   '@google/genai': ^2.17.1
   grammy: ^1.45.1
+  '@grammyjs/runner': ^2.0.3
   '@hapi/boom': ^10.0.1
   baileys: ^7.0.0-rc14
   bullmq: ^6.1.2

@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "@fi/core": "workspace:*",
+    "@grammyjs/runner": "catalog:",
     "grammy": "catalog:"
   },
   "devDependencies": {

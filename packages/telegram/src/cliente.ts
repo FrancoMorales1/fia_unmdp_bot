@@ -1,4 +1,5 @@
 import { createLogger, env, TelegramError } from '@fi/core';
+import { run, type RunnerHandle } from '@grammyjs/runner';
 import { Bot, InputFile } from 'grammy';
 
 import type { ClienteMensajeria, ManejadorMensaje, MensajeEntrante, Salida } from '@fi/core';
@@ -31,6 +32,7 @@ export function crearClienteTelegram(opciones: OpcionesCliente): ClienteMensajer
 
   const responderGrupos = opciones.responderGrupos ?? false;
   const bot = new Bot(token);
+  let runner: RunnerHandle | undefined;
 
   bot.catch = (error) => {
     log.error({ err: error }, 'Error no controlado en Telegram');
@@ -115,19 +117,16 @@ export function crearClienteTelegram(opciones: OpcionesCliente): ClienteMensajer
         }
       }
 
-      // bot.start() es un loop de polling que no resuelve hasta que se llama bot.stop().
-      // Usamos onStart para resolver la promesa ni bien el bot está listo y seguir.
-      await new Promise<void>((resolve, reject) => {
-        bot
-          .start({
-            allowed_updates: ['message', 'callback_query'],
-            onStart: (info) => {
-              log.info({ username: info.username }, 'Conectado a Telegram');
-              resolve();
-            },
-          })
-          .catch(reject);
+      // bot.start() procesa los updates de a uno (secuencial): con varios
+      // alumnos usando el bot a la vez, el segundo espera a que termine de
+      // responderle al primero (incluye la ida y vuelta a Gemini). El runner
+      // los procesa en paralelo — así de a uno tarda lo mismo, pero no se
+      // pisan entre usuarios distintos.
+      await bot.init();
+      runner = run(bot, {
+        runner: { fetch: { allowed_updates: ['message', 'callback_query'] } },
       });
+      log.info({ username: bot.botInfo.username }, 'Conectado a Telegram');
     },
 
     async enviar(jid: string, salida: Salida): Promise<void> {
@@ -139,7 +138,9 @@ export function crearClienteTelegram(opciones: OpcionesCliente): ClienteMensajer
     },
 
     async desconectar(): Promise<void> {
-      await bot.stop();
+      if (runner?.isRunning()) {
+        await runner.stop();
+      }
       log.info('Cliente de Telegram desconectado');
     },
   };
