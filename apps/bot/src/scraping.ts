@@ -16,21 +16,29 @@ const ID_PROGRAMADO = 'horarios-diario';
 export async function iniciarScraping(): Promise<{ cola: Queue<JobScraping>; worker: Worker }> {
   const cola = crearCola(NOMBRES_COLA.scraping);
 
-  const worker = crearWorker(NOMBRES_COLA.scraping, async (job) => {
-    log.info({ jobId: job.id }, 'Actualizando horarios');
+  const worker = crearWorker(
+    NOMBRES_COLA.scraping,
+    async (job) => {
+      log.info({ jobId: job.id }, 'Actualizando horarios');
 
-    const resultado = await actualizarHorarios({
-      ...(job.data.dias === undefined ? {} : { dias: job.data.dias }),
-      ...(job.data.area === undefined ? {} : { area: job.data.area }),
-    });
+      const resultado = await actualizarHorarios({
+        ...(job.data.dias === undefined ? {} : { dias: job.data.dias }),
+        ...(job.data.area === undefined ? {} : { area: job.data.area }),
+      });
 
-    if (resultado.fallidas.length > 0) {
-      log.warn({ fallidas: resultado.fallidas }, 'Quedaron días sin actualizar');
-    }
+      if (resultado.fallidas.length > 0) {
+        log.warn({ fallidas: resultado.fallidas }, 'Quedaron días sin actualizar');
+      }
 
-    log.info(resultado, 'Horarios actualizados');
-    return resultado;
-  });
+      log.info(resultado, 'Horarios actualizados');
+      return resultado;
+    },
+    // `guardarHorarios` borra e inserta en una sola transacción por fechas:
+    // dos corridas en paralelo pisan la misma ventana de fechas y chocan con
+    // la unique de (entry_id, fecha). Nunca tiene sentido scrapear en paralelo
+    // con uno mismo, así que va serializado.
+    { concurrency: 1 },
+  );
 
   await cola.upsertJobScheduler(
     ID_PROGRAMADO,
