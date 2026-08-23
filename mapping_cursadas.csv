@@ -1,0 +1,526 @@
+estado,materia_scraping,apariciones_14dias,titulo_crudo_ejemplo,confianza_match,materia_archivo,no_se_dicta
+match,accion.electricos,2,accion.electricos-(TP),alta,ACCIONAMIENTOS ELÉCTRICOS,
+match,algebra 1a,4,algebra 1A (T),alta,ÁLGEBRA I-A,
+match,algebra ia,2,algebra IA (P),alta,ÁLGEBRA I-A,
+match,algebra 1b (a1),2,algebra 1B (A1),alta,ÁLGEBRA I-B,
+match,algebra 1b a1,2,algebra 1B A1,alta,ÁLGEBRA I-B,
+match,algebra 1b a2,4,algebra 1B A2,alta,ÁLGEBRA I-B,
+match,algebra ii,6,algebra II (T) A 2,alta,ÁLGEBRA II,
+match,álgebra ii a1 p,2,Álgebra II A1 P,alta,ÁLGEBRA II,
+match,álgebra ii a1 t,2,Álgebra II A1 T,alta,ÁLGEBRA II,
+match,álgebra ii a2 p,2,Álgebra II A2 P,alta,ÁLGEBRA II,
+match,álgebra ii a3,2,Álgebra II A3 ( P),alta,ÁLGEBRA II,
+match,álgebra ii a3 p,2,Álgebra II A3 P,alta,ÁLGEBRA II,
+match,álgebra ii a3 t,2,Álgebra II A3 T,alta,ÁLGEBRA II,
+match,analisis de circuitos,4,analisis de circuitos,alta,ANÁLISIS DE CIRCUITOS,
+match,analisis matematico i,10,analisis matematico I(P)A2,alta,ANÁLISIS MATEMÁTICO I,
+match,analisis matematico i a1-a2,2,analisis matematico I A1-A2(P),alta,ANÁLISIS MATEMÁTICO I,
+match,analisis matematico i a1-a3,2,analisis matematico I A1-A3(P),alta,ANÁLISIS MATEMÁTICO I,
+match,análisis matemático ii a1 p,4,Análisis Matemático II A1 P,alta,ANÁLISIS MATEMÁTICO II,
+match,análisis matemático ii a1 t,2,Análisis Matemático II A1 T,alta,ANÁLISIS MATEMÁTICO II,
+match,análisis matemático ii a2 p,2,Análisis Matemático II A2 P,alta,ANÁLISIS MATEMÁTICO II,
+match,análisis matemático ii a2 t,2,Análisis Matemático II A2 T,alta,ANÁLISIS MATEMÁTICO II,
+match,análisis matemático ii a3 p,4,Análisis Matemático II A3 P,alta,ANÁLISIS MATEMÁTICO II,
+match,análisis matemático ii a3 t,2,Análisis Matemático II A3 T,alta,ANÁLISIS MATEMÁTICO II,
+match,analisis matematico iii,12,analisis matematico III (T)A1,alta,ANÁLISIS MATEMÁTICO III,
+match,analisis y diseño de sistemas i,4,analisis y diseño de sistemas I,alta,ANÁLISIS Y DISEÑO DE SISTEMAS I,
+match,analisis y protec. de sist. de potencia,2,analisis y protec. de sist. de potencia(TP),alta,ANÁLISIS Y PROTECCIÓN DE SISTEMAS DE POTENCIA,
+match,analisis y protec. de sist.de potencia,2,analisis y protec. de sist.de potencia,alta,ANÁLISIS Y PROTECCIÓN DE SISTEMAS DE POTENCIA,
+match,aplicaciones de hidráulica y neumática,2,aplicaciones de hidráulica y neumática (T-P),alta,APLICACIONES DE HIDRAÚLICA Y NEUMÁTICA,
+match,arq. de computadoras,2,arq. de computadoras,alta,ARQUITECTURA DE COMPUTADORAS,
+match,arq.de computadoras,2,arq.de computadoras,alta,ARQUITECTURA DE COMPUTADORAS,
+match,bases de datos p,2,Bases de Datos P,alta,BASES DE DATOS,
+match,bases de datos t,2,Bases de Datos T,alta,BASES DE DATOS,
+match,base de datos ii (op),4,base de datos II (OP),alta,BASES DE DATOS II,
+match,biomateriales,4,biomateriales-(TP),alta,BIOMATERIALES,
+match,calculos y elem. de maq,2,calculos y elem. de maq.,alta,CÁLCULO DE ELEMENTOS DE MÁQUINAS,
+match,práctica cálculos de elementos de máquinas,2,Práctica Cálculos de Elementos de Máquinas,alta,CÁLCULO DE ELEMENTOS DE MÁQUINAS,
+match,circuitos electronicos ii,6,circuitos electronicos II,alta,CIRCUITOS ELECTRÓNICOS II,
+match,comunicaciones digitales,4,comunicaciones digitales(TP),alta,COMUNICACIONES DIGITALES,
+match,concepto de economía industrial,4,concepto de economía industrial(TP),alta,CONCEPTOS DE ECONOMÍA INDUSTRIAL,
+match,control,2,control,alta,CONTROL,
+match,control 4e2,2,Control 4E2,alta,CONTROL,
+match,corrosion,4,corrosion (TP),alta,CORROSIÓN,
+match,desarrollo emprendedor y creación de empresas,2,Desarrollo Emprendedor y Creación de Empresas,alta,DESARROLLO EMPRENDEDOR Y LA CREACIÓN DE EMPRESAS DE BASE TECNOLÓGICA,
+match,dibujo b,2,dibujo B (T-P),alta,DIBUJO B,
+match,direccion de ventas industriales,2,Direccion de ventas industriales,alta,DIRECCIÓN DE VENTAS INDUSTRIALES,
+match,diseño de base de datos,2,diseño de base de datos,alta,DISEÑO DE BASES DE DATOS,
+match,diseñ de integ.de equip.est.e integ.de cañerias y recip,2,diseñ de integ.de equip.est.e integ.de cañerias y recip.,media,DISEÑO DE CAÑERÍAS Y RECIPIENTES DE PRESIÓN,
+match,diseño de integ.de equipos est.y cañerias y resip.de presion,2,diseño de integ.de equipos est.y cañerias y resip.de presion,alta,DISEÑO DE CAÑERÍAS Y RECIPIENTES DE PRESIÓN,
+match,diseño e integ.de equipos est.-y de recip.de presion,2,diseño e integ.de equipos est.-y de recip.de presion,alta,DISEÑO DE CAÑERÍAS Y RECIPIENTES DE PRESIÓN,
+match,diseño de sist. operativos,2,diseño de sist. operativos,alta,DISEÑO DE SISTEMAS OPERATIVOS,
+match,diseño de sist.operativos,2,diseño de sist.operativos,alta,DISEÑO DE SISTEMAS OPERATIVOS,
+match,economía de la inovación,2,Economía de la Inovación,alta,ECONOMÍA DE LA INNOVACIÓN,
+match,electronica:c,2,electronica:C,alta,ELECTRÓNICA,
+match,elec.de potencia,2,elec.de potencia,alta,ELECTRÓNICA DE POTENCIA,
+match,electronica de potencia,8,electronica de potencia,alta,ELECTRÓNICA DE POTENCIA,
+match,electronica digital,4,electronica digital,alta,ELECTRÓNICA DIGITAL,
+match,electrotecnia :a,2,electrotecnia :A,alta,ELECTROTECNIA A,
+match,electrotecnia: a,2,electrotecnia: A,alta,ELECTROTECNIA A,
+match,electrotecnia :d,2,electrotecnia :D,alta,ELECTROTECNIA D,
+match,electrotecnia: d,2,electrotecnia: D (T),alta,ELECTROTECNIA D,
+match,emprendimientos tecnologicos,2,emprendimientos tecnologicos,alta,EMPRENDIMIENTOS TECNOLÓGICOS,
+match,estática ii,4,Estática II,alta,ESTÁTICA II,
+match,estatica y resistencia de materiales,2,estatica y resistencia de materiales,alta,ESTÁTICA Y RESISTENCIA DE MATERIALES,
+match,"etica,leg,y prop.intelec.en el ejercicio prof",2,"etica,leg,y prop.intelec.en el ejercicio prof.",alta,"ÉTICA, LEGISLACIÓN Y PROPIEDAD INTELECTUAL EN EL EJERCICIO PROFESIONAL",
+match,fisica a (t-t p,2,fisica A (T-T P,alta,FÍSICA A (TURNO TARDE),
+match,fisica a (t-t) p,2,fisica A (T-T) P,alta,FÍSICA A (TURNO TARDE),
+match,física c i p,4,Física C I P,alta,FÍSICA C-I,
+match,física c i t,2,Física C I T,alta,FÍSICA C-I,
+match,fisica ci,4,fisica CI (P),alta,FÍSICA C-I,
+match,física ci t,2,Física Ci T,alta,FÍSICA C-I,
+match,física c ii p,4,Física C II P,alta,FÍSICA C-II,
+match,física c ii t,2,Física C II T,alta,FÍSICA C-II,
+match,fisica experimental a,2,fisica experimental A,alta,FÍSICA EXPERIMENTAL A,
+match,fisicoquimica 1,2,fisicoquimica 1(TP),alta,FISICOQUÍMICA I,
+match,fisicoquímica i t,2,Fisicoquímica I T,alta,FISICOQUÍMICA I,
+match,fisicoquímica i tp,2,Fisicoquímica I TP,alta,FISICOQUÍMICA I,
+match,fund. de arq. de comp,4,Fund. de Arq. de Comp.,alta,FUNDAMENTOS DE LA ARQUITECTURA DE COMPUTADORAS,
+match,fund. de arq.. de comp. p,2,Fund. de arq.. de Comp. P,alta,FUNDAMENTOS DE LA ARQUITECTURA DE COMPUTADORAS,
+match,fundamentos de la programacion,12,fundamentos de la programacion,alta,FUNDAMENTOS DE LA PROGRAMACIÓN,
+match,fundamentos de la qca,8,fundamentos de la Qca .,alta,FUNDAMENTOS DE QUÍMICA,
+match,introduccion a la quimica com:2,1,introduccion a la quimica com:2,media,FUNDAMENTOS DE QUÍMICA,
+match,introduccion a la quimica com:3,1,introduccion a la quimica com:3,media,FUNDAMENTOS DE QUÍMICA,
+match,principios de seg. informatica,2,principios de seg. informatica,media,GESTIÓN DE LA SEGURIDAD INFORMÁTICA,
+match,gestion de proyectos kaizer(op),2,gestion de proyectos Kaizer(OP),alta,GESTIÓN DE PROYECTOS,
+match,gest. del mantenimiento,4,gest. del mantenimiento(T),alta,GESTIÓN DEL MANTENIMIENTO,
+match,mantenimiento,1,Mantenimiento,media,GESTIÓN DEL MANTENIMIENTO,
+match,industrias alimentarias,4,industrias alimentarias (T-P),alta,INDUSTRIAS ALIMENTARIAS,
+match,industrias químicas,2,Industrias Químicas(TP),alta,INDUSTRIAS QUÍMICAS,
+match,informatica basica,18,informatica basica-T,alta,INFORMÁTICA BÁSICA,
+match,informatica en la empresa,6,informatica en la empresa(T),alta,INFORMÁTICA EN LA EMPRESA,
+match,ingeniería de las reacciones homogéneas,4,Ingeniería de las Reacciones Homogéneas,alta,INGENIERÍA DE LAS REACCIONES HOMOGÉNEAS,
+match,inge.en software,2,inge.en software,alta,INGENIERÍA DE SOFTWARE,
+match,ingeniería económica,2,Ingeniería Económica,alta,INGENIERÍA ECONÓMICA,
+match,ingenieria sanitaria,2,ingenieria sanitaria,alta,INGENIERÍA SANITARIA,
+match,prueba de suficiencia de inglés,1,Prueba de Suficiencia de Inglés,alta,INGLÉS (EXAMEN DE SUFICIENCIA),
+match,ingles tecnico i (com. i),2,ingles tecnico I (com. I),alta,INGLÉS TÉCNICO I,
+match,ingles tecnico i (com. ii),2,ingles tecnico I (com. II),alta,INGLÉS TÉCNICO I,
+match,ingles tecnico i(com:i),4,ingles tecnico I(com:I),alta,INGLÉS TÉCNICO I,
+match,ingles tecnico ii (com. i),2,ingles tecnico II (com. I),alta,INGLÉS TÉCNICO II,
+match,ingles tecnico ii (com. ii),4,ingles tecnico II (com. II),alta,INGLÉS TÉCNICO II,
+match,ingles tecnico ii(com-.i),2,ingles tecnico II(com-.I),alta,INGLÉS TÉCNICO II,
+match,"inst,termomecanicas",2,"inst,termomecanicas",alta,INSTALACIONES TERMOMECÁNICAS,
+match,instrumentacion electronica,4,instrumentacion electronica,alta,INSTRUMENTACIÓN ELECTRÓNICA,
+match,inteligencia artificial,4,Inteligencia Artificial,alta,INTELIGENCIA ARTIFICIAL,
+match,principios de electronica,2,principios de electronica-(TP),media,INTRODUCCIÓN A LA ELECTRÓNICA,
+match,int. a la ing. mecánica,2,Int. a la Ing. Mecánica,alta,INTRODUCCIÓN A LA INGENIERÍA MECÁNICA,
+match,int. a la mat. discreta,2,Int. a la Mat. Discreta (T)A1,alta,INTRODUCCIÓN A LA MATEMÁTICA DISCRETA,
+match,int. a la mat.discreta,2,Int. a la Mat.Discreta(P)A1,alta,INTRODUCCIÓN A LA MATEMÁTICA DISCRETA,
+match,introd. a la mat discreta,4,introd. a la mat discreta(T)A2,alta,INTRODUCCIÓN A LA MATEMÁTICA DISCRETA,
+match,introd.a los sist. cad,2,introd.a los sist. CAD -(P),alta,INTRODUCCIÓN A LOS SISTEMAS CAD,
+match,introd. sist.electricos de potencia,2,introd. sist.electricos de potencia,alta,INTRODUCCIÓN A LOS SISTEMAS ELÉCTRICOS DE POTENCIA,
+match,introd.sist.electricos de potencia,2,introd.sist.electricos de potencia,alta,INTRODUCCIÓN A LOS SISTEMAS ELÉCTRICOS DE POTENCIA,
+match,introduccion a polimeros,4,introduccion a polimeros (TP),alta,INTRODUCCIÓN A POLÍMEROS MEDIOAMBIENTE Y RECICLADO,
+match,control discreto,4,control discreto,media,INTRODUCCIÓN AL CONTROL DISCRETO,
+match,introducción al desarrollo sostenible,2,Introducción al desarrollo Sostenible,alta,INTRODUCCIÓN AL DESARROLLO SUSTENTABLE,
+match,introduccion al diseño 3d,2,introduccion al diseño 3D,alta,INTRODUCCIÓN AL DISEÑO 3D,
+match,introd.al proc.dig. de imagenes,2,introd.al proc.dig. de imagenes,alta,INTRODUCCIÓN AL PROCESAMIENTO DIGITAL DE IMÁGENES,
+match,investigacion operativa b,2,investigacion operativa B (T-P),alta,INVESTIGACIÓN OPERATIVA B,
+match,investigación operativa b,2,Investigación Operativa B(TP),alta,INVESTIGACIÓN OPERATIVA B,
+match,lab. de ing.en alimentos,2,lab. de Ing.en Alimentos(TP),alta,LABORATORIO DE INGENIERÍA EN ALIMENTOS,
+match,lab.de oper.unitarias,2,lab.de oper.unitarias (T)todas las com.,alta,LABORATORIO DE OPERACIONES UNITARIAS,
+match,laboratorio ii,2,Laboratorio II(T-P),alta,LABORATORIO II,
+match,laboratorio:ii,2,laboratorio:II-(TP),alta,LABORATORIO II,
+match,maq. electricas :a,4,Maq. electricas :A,media,MÁQUINAS ELÉCTRICAS,
+match,maquinas electricas,2,Maquinas electricas (T),alta,MÁQUINAS ELÉCTRICAS,
+match,maquinas termicas ii,4,maquinas termicas II,alta,MÁQUINAS TÉRMICAS II,
+match,maq. y accion. electricos,2,Maq. y accion. electricos.-(T),alta,MÁQUINAS Y ACCIONAMIENTOS ELÉCTRICOS,
+match,fluidos y maq. fluidodinamicas,8,fluidos y maq. fluidodinamicas,alta,MECÁNICA DE LOS FLUIDOS Y MÁQUINAS FLUIDODINÁMICAS,
+match,met. numericos,2,met. numericos,alta,MÉTODOS NUMÉRICOS,
+match,op. de plantas de proc.(ai),2,Op. de Plantas de Proc.(AI),alta,OPERACIÓN DE PLANTAS DE PROCESOS,
+match,operacion de planta de proc. aiii,2,Operacion de planta de proc. AIII,alta,OPERACIÓN DE PLANTAS DE PROCESOS,
+match,planificacion y ctrl.de la produccion,2,planificacion y ctrl.de la produccion(TP),alta,PLANIFICACIÓN Y CONTROL DE LA PRODUCCIÓN,
+match,probabilidad y estadistica,6,probabilidad y estadistica(T)A1,alta,PROBABILIDAD Y ESTADÍSTICA,
+match,probabilidad y estadística,2,probabilidad y estadística(P)A2,alta,PROBABILIDAD Y ESTADÍSTICA,
+match,proc.de alimentos,4,proc.de alimentos (TP),alta,PROCESAMIENTO DE ALIMENTOS,
+match,procesam.de mater.compuestos,4,procesam.de mater.compuestos-(TP),alta,PROCESAMIENTO DE MATERIALES COMPUESTOS,
+match,procesam.de met. y sus aleaciones,2,Procesam.de Met. y sus Aleaciones-(TP),alta,PROCESAMIENTO DE METALES Y SUS ALEACIONES,
+match,procesam.de met.y sus aleaciones,2,procesam.de met.y sus aleaciones-(TP),alta,PROCESAMIENTO DE METALES Y SUS ALEACIONES,
+match,programacion ii,4,programacion II,alta,PROGRAMACIÓN II,
+match,prop. estructurales ii,2,Prop. Estructurales II (TP),alta,PROPIEDADES ESTRUCTURALES II,
+match,prop.estructurales ii,2,Prop.Estructurales II(TP),alta,PROPIEDADES ESTRUCTURALES II,
+match,"prop, funcionales de (mater)",2,"prop, funcionales de (mater). (T)",alta,PROPIEDADES FUNCIONALES,
+match,prop. funcionales de (mater),2,prop. funcionales de (mater). (T),alta,PROPIEDADES FUNCIONALES,
+match,proyecto de ingenieria industrial ii,2,proyecto de ingenieria industrial II (TP),alta,PROYECTO DE INGENIERIA INDUSTRIAL II,
+match,proyecto de ingeniería industrial ii,1,proyecto de ingeniería industrial II,alta,PROYECTO DE INGENIERIA INDUSTRIAL II,
+match,proyecto transversal ci,2,proyecto transversal CI,alta,PROYECTO TRANSVERSAL C I,
+match,proyecto transversal ii,6,proyecto transversal II,alta,PROYECTO TRANSVERSAL II,
+match,proyecto transversal iv,4,proyecto transversal IV,alta,PROYECTO TRANSVERSAL IV,
+match,quimica del carbono,2,quimica del carbono-(TP),alta,QUÍMICA DEL CARBONO,
+match,química del carbono,4,Química del Carbono (TP),alta,QUÍMICA DEL CARBONO,
+match,quimica del medio ambiente,2,Quimica del Medio Ambiente,alta,QUÍMICA DEL MEDIO AMBIENTE,
+match,quimica general e inorganica,4,quimica general e inorganica,alta,QUÍMICA GENERAL E INORGÁNICA,
+match,bioquímica de alimentos,2,bioquímica de alimentos,media,QUÍMICA Y BIOQUÍMICA DE ALIMENTOS,
+match,redes de computadoras p,2,Redes de Computadoras P,alta,REDES DE COMPUTADORAS,
+match,redes de computadoras t,2,Redes de Computadoras T,alta,REDES DE COMPUTADORAS,
+match,redes de datos,4,redes de datos,alta,REDES DE DATOS,
+match,redes de datos/redes de transmision de datos,4,redes de datos/redes de transmision de datos,media,REDES DE DATOS,
+match,seg.en redes de comp,2,seg.en redes de comp.,alta,SEGURIDAD EN REDES DE COMPUTADORAS,
+match,seg. hig. y medio ambiente,6,seg. hig. y medio ambiente(TP),alta,"SEGURIDAD, HIGIENE Y MEDIO AMBIENTE",
+match,seg.hig. y med. ambiente,2,seg.hig. y med. ambiente-(TP),alta,"SEGURIDAD, HIGIENE Y MEDIO AMBIENTE",
+match,seleccion de mater.p/diseño ingenieril,2,Seleccion de Mater.p/diseño ingenieril(TP),alta,SELECCIÓN DE MATERIALES PARA DISEÑO INGENIERIL,
+match,seleccion de materi.p/ diseño ingenieril,2,Seleccion de Materi.p/ diseño ingenieril (T-P),alta,SELECCIÓN DE MATERIALES PARA DISEÑO INGENIERIL,
+match,seminario de comunicacion eficaz,2,seminario de comunicacion eficaz,alta,SEMINARIO DE COMUNICACIÓN EFICAZ,
+match,señales y sist. de tiempo continuo,4,señales y sist. de tiempo continuo,alta,SEÑALES Y SISTEMAS DE TIEMPO CONTINUO,
+match,señales y sist.de tiempo continuo,2,señales y sist.de tiempo continuo,alta,SEÑALES Y SISTEMAS DE TIEMPO CONTINUO,
+match,tecn.cad aplicada,2,tecn.CAD aplicada-(T),media,SISTEMAS CAD APLICADOS,
+match,sist. de comp. distribuidos ii,2,Sist. de Comp. Distribuidos II,alta,SISTEMAS DE COMPUTACIÓN DISTRIBUIDOS II,
+match,sist.de comp. distribuidos ii,2,Sist.de comp. distribuidos II,alta,SISTEMAS DE COMPUTACIÓN DISTRIBUIDOS II,
+match,sistemas de control,10,sistemas de control,alta,SISTEMAS DE CONTROL,
+match,sist. de rep. para ing,2,Sist. de Rep. para Ing.,alta,SISTEMAS DE REPRESENTACIÓN PARA INGENIERÍA,
+match,sistemas distribuidos p,2,Sistemas Distribuidos P,alta,SISTEMAS DISTRIBUIDOS,
+match,sistemas distribuidos t,2,Sistemas Distribuidos T,alta,SISTEMAS DISTRIBUIDOS,
+match,sistemas embebidos,4,sistemas embebidos,alta,SISTEMAS EMBEBIDOS,
+match,taller de ingeniería i,2,Taller de Ingeniería I,alta,TALLER DE INGENIERÍA I,
+match,taller de ingenieria ii,3,taller de ingenieria II,alta,TALLER DE INGENIERÍA II,
+match,taller de ingeniería ii,1,Taller de Ingeniería II (TP),alta,TALLER DE INGENIERÍA II,
+match,tecn.de creatividad aplic,2,tecn.de creatividad aplic.(TP),alta,TÉCNICAS DE CREATIVIDAD APLICADA,
+match,tecnologia,2,tecnologia,alta,TECNOLOGÍA,
+match,introducción a los procesos de fabricación,4,Introducción a los procesos de Fabricación,media,TECNOLOGÍA DE LA FABRICACIÓN,
+match,tecnologia mecanica ii,2,tecnologia mecanica II,alta,TECNOLOGÍA MECÁNICA II,
+match,tecn.y diseño de mater.de const,2,"tecn.y diseño de mater.de const,-(T)",alta,TECNOLOGÍA Y DISEÑO DE MATERIALES DE CONSTRUCCIÓN,
+match,teoria de la información,8,Teoria de la Información,alta,TEORÍA DE LA INFORMACIÓN,
+match,teoria de señales y sistemas,6,teoria de señales y sistemas,alta,TEORÍA DE SEÑALES Y SISTEMAS,
+match,termodinamica i (alim.),2,termodinamica I (alim.)-P,alta,TERMODINÁMICA DE ALIMENTOS I,
+match,termodinamica i(alim.),2,Termodinamica I(alim.)(T),alta,TERMODINÁMICA DE ALIMENTOS I,
+match,termodinamica (mater.),2,termodinamica (mater.),alta,TERMODINÁMICA DE MATERIALES,
+match,termodinamica(mat.),2,termodinamica(mat.) (TP),alta,TERMODINÁMICA DE MATERIALES,
+match,termodinámica industrial,4,Termodinámica Industrial,alta,TERMODINÁMICA INDUSTRIAL,
+match,p.fina l(electronica),1,P.Fina l(electronica),media,TRABAJO FINAL ING. ELÉCTRICA,
+match,trabajo final (alim),2,Trabajo Final (alim),alta,TRABAJO FINAL ING. EN ALIMENTOS,
+match,trabajo final (ind),4,Trabajo Final (ind)-TP,alta,TRABAJO FINAL ING. INDUSTRIAL,
+match,trabajo final (qca),2,Trabajo Final (Qca)-T,alta,TRABAJO FINAL ING. QUÍMICA,
+match,trabajo final qca,2,Trabajo Final Qca ( P),alta,TRABAJO FINAL ING. QUÍMICA,
+match,trabajo final química t,2,Trabajo Final Química T,alta,TRABAJO FINAL ING. QUÍMICA,
+match,transferencia de masa,4,Transferencia de Masa,alta,TRANSFERENCIA DE MASA,
+match,transmision del ee,4,transmision del EE,alta,TRANSMISIÓN DE LA ENERGÍA ELÉCTRICA,
+match,trat.de efluentes liq,2,trat.de efluentes liq.(TP),alta,TRATAMIENTO DE EFLUENTES LÍQUIDOS,
+match,introd.al tratam.digital de señales,4,introd.al tratam.digital de señales,media,TRATAMIENTO DIGITAL DE SEÑALES,
+solo_scraping,administración empresarial en la economia del conocimiento,2,Administración Empresarial en la economia del conocimiento,,,
+solo_scraping,admistracion estrategica,2,admistracion estrategica,,,
+solo_scraping,aproximacion a la matematica (com:2),1,aproximacion a la matematica (com:2),,,
+solo_scraping,aproximacion a la matematica com:3,2,aproximacion a la matematica com:3,,,
+solo_scraping,aproximacion a la matematica com.1,1,aproximacion a la matematica com.1,,,
+solo_scraping,aproximacion a la matematica com.2,1,aproximacion a la matematica com.2,,,
+solo_scraping,automatizacion b,2,automatizacion B (P),,,
+solo_scraping,c.a.f.i,1,C.A.F.I,,,
+solo_scraping,c.p.d,2,C.P.D,,,
+solo_scraping,calid. de sofware a tp-taller de programacion in,2,Calid. de Sofware A TP-taller de programacion In,,,
+solo_scraping,comportamiento organizacional y relaciones/administración de rh(op.y oblig.),2,comportamiento organizacional y relaciones/Administración de RH(op.y oblig.),,,
+solo_scraping,concurso,5,Concurso,,,
+solo_scraping,concurso (qca),1,Concurso (Qca),,,
+solo_scraping,conv.electromecan.de la energia,2,conv.electromecan.de la energia-(T),,,
+solo_scraping,conversion electromecanica de la energia,2,conversion electromecanica de la energia,,,
+solo_scraping,curso (no docente),1,curso (no docente),,,
+solo_scraping,curso foguista,2,curso foguista,,,
+solo_scraping,curso frigorista,2,Curso Frigorista,,,
+solo_scraping,curso(no docente),1,curso(no docente),,,
+solo_scraping,diseño con microondas,4,diseño con microondas,,,
+solo_scraping,electronica aplicada,4,electronica aplicada,,,
+solo_scraping,electrotecnia :c,2,electrotecnia :C,,,
+solo_scraping,estrategias para productos de software,2,estrategias para productos de software,,,
+solo_scraping,fisica a,4,fisica A(TP)-TT,,,
+solo_scraping,física a,4,Física A (TP)-TM,,,
+solo_scraping,fisica b,4,fisica B,,,
+solo_scraping,física b -(bi- bii ),2,Física B -(BI- BII )-TP,,,
+solo_scraping,fisica b- bi y bii,2,Fisica B- BI y BII (TP),,,
+solo_scraping,fisica basica (consulta),1,fisica basica (consulta),,,
+solo_scraping,fisicoquímica ii,2,Fisicoquímica II (TP),,,
+solo_scraping,fluidodinamica,4,fluidodinamica-(TP),,,
+solo_scraping,formulacion y eval.de proy,2,formulacion y eval.de proy. (TP),,,
+solo_scraping,formulacion y eval.de proyectos,2,formulacion y eval.de proyectos.,,,
+solo_scraping,fund. de metalurgia fisica,2,fund. de metalurgia fisica (TP),,,
+solo_scraping,fund.de metalurgia fisica,2,fund.de metalurgia fisica (TP),,,
+solo_scraping,gest.de logistica integ.y cad.de sumistro,2,gest.de logistica integ.y cad.de sumistro.(TP),,,
+solo_scraping,gest.de seg.informatica y seg.en sist,6,gest.de seg.informatica y seg.en sist.(T),,,
+solo_scraping,gestion de proy.informaticos (op),2,gestion de proy.informaticos (OP),,,
+solo_scraping,gestion de proy.informaticos(op),2,gestion de proy.informaticos(OP),,,
+solo_scraping,ingeniería de sistemas de procesos,2,Ingeniería de Sistemas de Procesos,,,
+solo_scraping,ingles profesional b (com.i),2,ingles profesional B (com.I),,,
+solo_scraping,ingles profesional b (com.ii),2,ingles profesional B (com.II),,,
+solo_scraping,ingles profesional b(com ii),2,ingles profesional B(com II),,,
+solo_scraping,ingles profesional b(com.ii),2,ingles profesional B(com.II),,,
+solo_scraping,instalaciones : ii,2,instalaciones : II,,,
+solo_scraping,instalaciones: ii,2,instalaciones: II,,,
+solo_scraping,int.al modelado computacional,6,int.al modelado computacional(P),,,
+solo_scraping,introd.al mod. computacional,2,introd.al mod. computacional-(T)-A1,,,
+solo_scraping,lineas de transm. y antenas,4,lineas de transm. y antenas,,,
+solo_scraping,maq. y equipos. ind.i,2,maq. y equipos. ind.I (TP),,,
+solo_scraping,maq.y equipos industriales:i,2,maq.y equipos industriales:I-(TP),,,
+solo_scraping,materiales i,2,materiales I-(TP),,,
+solo_scraping,med.electricas:b,4,med.electricas:B,,,
+solo_scraping,operaciones unitarias ii,2,Operaciones Unitarias II,,,
+solo_scraping,operaciones unitarias-ii,2,operaciones unitarias-II,,,
+solo_scraping,operaciones unitarias-ii-(ppiq),2,operaciones unitarias-II-(PPIQ),,,
+solo_scraping,procesos de fabricacion i,2,procesos de fabricacion I,,,
+solo_scraping,programacion a,2,programacion A-(T),,,
+solo_scraping,programación a,3,Programación A,,,
+solo_scraping,programación a p,12,Programación A P,,,
+solo_scraping,programación a t,1,Programación A T,,,
+solo_scraping,programacion b,6,programacion B (P),,,
+solo_scraping,programación b,2,Programación B (TP),,,
+solo_scraping,programación b p,4,Programación B P,,,
+solo_scraping,programacion c,2,programacion C (P),,,
+solo_scraping,programación c,2,Programación C (TP),,,
+solo_scraping,programación c p,4,Programación C P,,,
+solo_scraping,programación c t,2,Programación C T,,,
+solo_scraping,proyecto de ingeniería industrial iii,2,proyecto de ingeniería industrial III,,,
+solo_scraping,proyecto integrador i,4,proyecto integrador I,,,
+solo_scraping,proyecto transversal c3,2,proyecto transversal C3,,,
+solo_scraping,proyecto transversal vi,4,proyecto transversal VI,,,
+solo_scraping,redes de datos electrónica,2,Redes de Datos Electrónica,,,
+solo_scraping,redes y com .de datos a,2,Redes y Com .de Datos A,,,
+solo_scraping,redes y com de datos a,4,Redes y Com de Datos A,,,
+solo_scraping,redes y comun.de datos a,2,redes y comun.de datos A,,,
+solo_scraping,redes y comunicacion de datos a,2,redes y comunicacion de datos A,,,
+solo_scraping,reserva (inf.),2,reserva (inf.),,,
+solo_scraping,reservada (artigas-sosa)),1,reservada (Artigas-Sosa)),,,
+solo_scraping,seminario de energías renovables,2,Seminario de Energías Renovables,,,
+solo_scraping,seminarios incitaa,2,seminarios INCITAA,,,
+solo_scraping,sistemas propulsivos i,4,sistemas propulsivos I,,,
+solo_scraping,taller ingeniería iii,2,Taller Ingeniería III,,,
+solo_scraping,tecn.de analisis fisicoquimicas,2,tecn.de analisis fisicoquimicas-(T),,,
+solo_scraping,tecnicas de analisis fisicoquimica,4,tecnicas de analisis fisicoquimica-(TP),,,
+solo_scraping,tecnología de control,2,Tecnología de Control,,,
+solo_scraping,tecnologia mecanica,2,tecnologia mecanica(T-P),,,
+solo_scraping,tecnologias informaticas a ii,12,tecnologias informaticas A II (TP) com:1,,,
+solo_scraping,tecnologias informaticas b ii,8,tecnologias informaticas B II(T),,,
+solo_scraping,termodinámica i,2,Termodinámica I (TP),,,
+solo_scraping,trib.fricc.desgaste y lubricacion,2,trib.fricc.desgaste y lubricacion,,,
+solo_archivo,,,,,ADMINISTRACIÓN DE OPERACIONES,FALSE
+solo_archivo,,,,,ADMINISTRACIÓN DE RECURSOS HUMANOS,FALSE
+solo_archivo,,,,,ÁLGEBRA A,FALSE
+solo_archivo,,,,,ÁLGEBRA B,FALSE
+solo_archivo,,,,,ALGORITMOS Y ESTRUCTURA DE DATOS,FALSE
+solo_archivo,,,,,ANÁLISIS DE RIESGOS DE ALIMENTOS,TRUE
+solo_archivo,,,,,ANÁLISIS MATEMÁTICO A,FALSE
+solo_archivo,,,,,ANÁLISIS MATEMÁTICO B,FALSE
+solo_archivo,,,,,ANÁLISIS MATEMÁTICO C,FALSE
+solo_archivo,,,,,ANÁLISIS NUMÉRICO PARA INGENIERÍA,FALSE
+solo_archivo,,,,,ANÁLISIS Y DISEÑO DE SISTEMAS II,FALSE
+solo_archivo,,,,,ARQUITECTURA Y ORGANIZACIÓN DE COMPUTADORAS,FALSE
+solo_archivo,,,,,ASPECTOS QUÍMICOS DE LA DEGRADACIÓN DE POLÍMEROS,TRUE
+solo_archivo,,,,,AUTOMATISMOS INDUSTRIALES I,FALSE
+solo_archivo,,,,,AUTOMATIZACIÓN BASADA EN NEUMÁTICA E HIDRÁULICA,FALSE
+solo_archivo,,,,,BALANCES DE MASA Y ENERGÍA,FALSE
+solo_archivo,,,,,BALANCES DE MATERIA Y ENERGÍA,FALSE
+solo_archivo,,,,,BROMATOLOGÍA,FALSE
+solo_archivo,,,,,CENTRALES ELÉCTRICAS I,FALSE
+solo_archivo,,,,,CERÁMICA INDUSTRIAL,FALSE
+solo_archivo,,,,,CINÉTICA DE REACCIONES DE POLIMERIZACIÓN,FALSE
+solo_archivo,,,,,CIRCUITOS ELECTRÓNICOS I,FALSE
+solo_archivo,,,,,COACHING ORGANIZACIONAL,FALSE
+solo_archivo,,,,,COMPONENTES MECÁNICOS Y NEUMÁTICA,FALSE
+solo_archivo,,,,,COMPORTAMIENTO ORGANIZACIONAL,FALSE
+solo_archivo,,,,,COMPUTACIÓN,FALSE
+solo_archivo,,,,,COMUNICACIONES ANALÓGICAS,FALSE
+solo_archivo,,,,,CONTROL DE POTENCIA,FALSE
+solo_archivo,,,,,CONTROL EN INDUSTRIAS DE ALIMENTOS,FALSE
+solo_archivo,,,,,CONTROL NUMÉRICO,FALSE
+solo_archivo,,,,,DERECHO EN INGENIERÍA,FALSE
+solo_archivo,,,,,DIBUJO A,FALSE
+solo_archivo,,,,,DIBUJO I,FALSE
+solo_archivo,,,,,DIBUJO II,FALSE
+solo_archivo,,,,,DINÁMICA DEL SÓLIDO,FALSE
+solo_archivo,,,,,DINÁMICA Y CONTROL DE PROCESOS,FALSE
+solo_archivo,,,,,DISEÑO DE ARQUITECTURA DE SOFTWARE,FALSE
+solo_archivo,,,,,DISEÑO DE AUTOMATISMOS,FALSE
+solo_archivo,,,,,DISEÑO DIGITAL CON MICROCONTROLADORES,FALSE
+solo_archivo,,,,,DISEÑO DIGITAL CON TÉCNICAS DE ALTO NIVEL,FALSE
+solo_archivo,,,,,DISPOSITIVOS ELECTRÓNICOS,FALSE
+solo_archivo,,,,,DISPOSITIVOS Y CIRCUITOS ELECTRÓNICOS,FALSE
+solo_archivo,,,,,DISTRIBUCIÓN DE LA ENERGÍA ELÉCTRICA,FALSE
+solo_archivo,,,,,ECONOMÍA GENERAL,FALSE
+solo_archivo,,,,,ECONOMÍA INDUSTRIAL,FALSE
+solo_archivo,,,,,ELECTROTECNIA,FALSE
+solo_archivo,,,,,ELECTROTECNIA 1,FALSE
+solo_archivo,,,,,ELECTROTECNIA 2,FALSE
+solo_archivo,,,,,ELECTROTECNIA 3,FALSE
+solo_archivo,,,,,ELECTROTECNIA GENERAL,FALSE
+solo_archivo,,,,,ENERGÍAS ALTERNATIVAS TERMOMECÁNICAS,FALSE
+solo_archivo,,,,,ESTADÍSTICA BÁSICA,FALSE
+solo_archivo,,,,,ESTÁTICA DEL SÓLIDO,FALSE
+solo_archivo,,,,,ESTÁTICA I,FALSE
+solo_archivo,,,,,EXPLORACIÓN DE DATOS PARA LA INTELIGENCIA COMPETITIVA,FALSE
+solo_archivo,,,,,FENÓMENOS DE TRANSPORTE,FALSE
+solo_archivo,,,,,FIABILIDAD ESTRUCTURAL Y CALIDAD EN LA CONSTR. DE MÁQUINAS,TRUE
+solo_archivo,,,,,FÍSICA 1 (TURNO MAÑANA),FALSE
+solo_archivo,,,,,FÍSICA 1 (TURNO TARDE),FALSE
+solo_archivo,,,,,FÍSICA 2,FALSE
+solo_archivo,,,,,FÍSICA 3,FALSE
+solo_archivo,,,,,FÍSICA A (TURNO MAÑANA),FALSE
+solo_archivo,,,,,FÍSICA B-I,FALSE
+solo_archivo,,,,,FÍSICA B-II,FALSE
+solo_archivo,,,,,FÍSICA DE LA MATERIA CONDENSADA,FALSE
+solo_archivo,,,,,FÍSICA DE LOS SEMICONDUCTORES,FALSE
+solo_archivo,,,,,FÍSICA EXPERIMENTAL,FALSE
+solo_archivo,,,,,FÍSICA TÉCNICA,TRUE
+solo_archivo,,,,,FISICOQUÍMICA,FALSE
+solo_archivo,,,,,FLUIDODINÁMICA COMPUTACIONAL,FALSE
+solo_archivo,,,,,FUNDAMENTOS DE COMUNICACIONES DIGITALES,FALSE
+solo_archivo,,,,,FUNDAMENTOS DE LA ESTÁTICA Y RESISTENCIA DE MATERIALES,FALSE
+solo_archivo,,,,,FUNDAMENTOS DE LA INFORMÁTICA,FALSE
+solo_archivo,,,,,GESTIÓN AMBIENTAL,FALSE
+solo_archivo,,,,,GESTIÓN DE LA CALIDAD,FALSE
+solo_archivo,,,,,GESTIÓN DE LA INNOVACIÓN TECNOLÓGICA E INDUSTRIAL,FALSE
+solo_archivo,,,,,GESTIÓN DE LA TECNOLOGÍA Y LA INNOVACIÓN,FALSE
+solo_archivo,,,,,GESTIÓN DE PATENTES Y PROPIEDAD INTELECTUAL,FALSE
+solo_archivo,,,,,GESTIÓN DE PROCESOS EN INDUSTRIAS DE ALIMENTOS,FALSE
+solo_archivo,,,,,HERRAMIENTAS DE REOLOGÍA APLICADA A LA CARACTERIZACIÓN Y PROCESAMIENTO DE ALIMENTOS,FALSE
+solo_archivo,,,,,HISTORIA DE PROYECTOS DE INGENIERÍA,FALSE
+solo_archivo,,,,,INGENIERÍA DE LAS REACCIONES HETEROGÉNEAS,FALSE
+solo_archivo,,,,,INGENIERÍA DE VIDEOJUEGOS,FALSE
+solo_archivo,,,,,INGENIERÍA ECONÓMICA PARA EMPRESAS INDUSTRIALES Y DE SERVICIOS,FALSE
+solo_archivo,,,,,INGLÉS I,FALSE
+solo_archivo,,,,,INGLÉS II,FALSE
+solo_archivo,,,,,INGLÉS PROFESIONAL I,FALSE
+solo_archivo,,,,,INGLÉS PROFESIONAL II,FALSE
+solo_archivo,,,,,INSTALACIONES ELÉCTRICAS I,FALSE
+solo_archivo,,,,,INSTALACIONES ELÉCTRICAS II,FALSE
+solo_archivo,,,,,INSTALACIONES INDUSTRIALES,FALSE
+solo_archivo,,,,,INSTRUMENTACIÓN AVANZADA,FALSE
+solo_archivo,,,,,INSTRUMENTACIÓN VIRTUAL,TRUE
+solo_archivo,,,,,INTEGRIDAD DE CAÑERÍAS Y RECIPIENTES DE PRESIÓN,FALSE
+solo_archivo,,,,,INTELIGENCIA COMPUTACIONAL,FALSE
+solo_archivo,,,,,INTRODUCCIÓN A LA BIOINGENIERÍA,FALSE
+solo_archivo,,,,,INTRODUCCIÓN A LA CIENCIA DE LOS MATERIALES,FALSE
+solo_archivo,,,,,INTRODUCCIÓN A LA ELECTRÓNICA INDUSTRIAL,FALSE
+solo_archivo,,,,,INTRODUCCIÓN A LA TERMODINÁMICA Y MÁQUINAS TÉRMICAS,FALSE
+solo_archivo,,,,,INTRODUCCIÓN A LOS SISTEMAS DISTRIBUIDOS,FALSE
+solo_archivo,,,,,INTRODUCCIÓN AL DESEMPEÑO PROFESIONAL,FALSE
+solo_archivo,,,,,INTRODUCCIÓN AL MÉTODO DE LOS ELEMENTOS FINITOS,TRUE
+solo_archivo,,,,,INTRODUCCIÓN AL TRATAMIENTO DE EFLUENTES LÍQUIDOS,FALSE
+solo_archivo,,,,,INVESTIGACIÓN OPERATIVA,FALSE
+solo_archivo,,,,,INVESTIGACIÓN OPERATIVA A,FALSE
+solo_archivo,,,,,INVESTIGACIÓN OPERATIVA I,FALSE
+solo_archivo,,,,,INVESTIGACIÓN OPERATIVA II,FALSE
+solo_archivo,,,,,LABORATORIO DE QUÍMICA DE ALIMENTOS,FALSE
+solo_archivo,,,,,LABORATORIO DE QUÍMICA I,FALSE
+solo_archivo,,,,,LABORATORIO DE QUÍMICA II,FALSE
+solo_archivo,,,,,LABORATORIO DE REACTORES Y CONTROL,FALSE
+solo_archivo,,,,,LABORATORIO I,FALSE
+solo_archivo,,,,,LENGUAJES FORMALES,FALSE
+solo_archivo,,,,,LIDERAZGO Y RESPONSABILIDAD SOCIAL,FALSE
+solo_archivo,,,,,LOGÍSTICA,FALSE
+solo_archivo,,,,,MANTENIMIENTO DE MAQUINAS ELÉCTRICAS,FALSE
+solo_archivo,,,,,MÁQUINAS ELÉCTRICAS I,FALSE
+solo_archivo,,,,,MÁQUINAS ELÉCTRICAS II,FALSE
+solo_archivo,,,,,MÁQUINAS TÉRMICAS I,FALSE
+solo_archivo,,,,,MARKETING,FALSE
+solo_archivo,,,,,MARKETING INDUSTRIAL,FALSE
+solo_archivo,,,,,MATEMÁTICA AVANZADA,FALSE
+solo_archivo,,,,,MATEMÁTICA DISCRETA (Dpto. de Matemática),FALSE
+solo_archivo,,,,,MATERIALES ELÉCTRICOS,FALSE
+solo_archivo,,,,,MATERIALES ELECTROCERÁMICOS,FALSE
+solo_archivo,,,,,MATERIALES ESPECIALES,FALSE
+solo_archivo,,,,,MATERIALES INDUSTRIALES,FALSE
+solo_archivo,,,,,MATERIALES MECÁNICOS,FALSE
+solo_archivo,,,,,MATERIALES POLIMÉRICOS EN CONTACTO CON ALIMENTOS,TRUE
+solo_archivo,,,,,MECÁNICA COMPUTACIONAL,FALSE
+solo_archivo,,,,,MECÁNICA DE FLUIDOS,FALSE
+solo_archivo,,,,,MECÁNICA DE LOS FLUIDOS,FALSE
+solo_archivo,,,,,MECÁNICA DEL CONTINUO,FALSE
+solo_archivo,,,,,MECÁNICA DEL SÓLIDO,FALSE
+solo_archivo,,,,,MECÁNICA DEL SÓLIDO III,FALSE
+solo_archivo,,,,,MECÁNICA ORBITAL,FALSE
+solo_archivo,,,,,MECÁNICA RACIONAL,FALSE
+solo_archivo,,,,,MECANISMOS DE INTEGRACIÓN ECONÓMICA,FALSE
+solo_archivo,,,,,MECANISMOS Y ELEMENTOS DE LA MECÁNICA,FALSE
+solo_archivo,,,,,MECANISMOS Y ELEMENTOS DE MAQUINAS,FALSE
+solo_archivo,,,,,MEDICIONES ELÉCTRICAS I,FALSE
+solo_archivo,,,,,MEDICIONES ELÉCTRICAS II,FALSE
+solo_archivo,,,,,MEDICIONES ELECTRÓNICAS,FALSE
+solo_archivo,,,,,MEDIOS DE TRANSMISIÓN,FALSE
+solo_archivo,,,,,METALURGIA APLICADA Y MATERIALES,FALSE
+solo_archivo,,,,,METALURGIA FÍSICA,FALSE
+solo_archivo,,,,,MÉTODOS NUMÉRICOS PARA INGENIERÍA,FALSE
+solo_archivo,,,,,METROLOGÍA DIMENSIONAL,FALSE
+solo_archivo,,,,,MICROBIOLOGÍA DE ALIMENTOS,FALSE
+solo_archivo,,,,,MODELADO Y SIMULACIÓN DE MATERIALES,FALSE
+solo_archivo,,,,,MODELIZACIÓN Y PREDICCIÓN C/TECNOLOGÍAS EMERGENTES (OPTATIVA),FALSE
+solo_archivo,,,,,MODELOS DE FLUJO DE REACTORES QUÍMICOS,TRUE
+solo_archivo,,,,,MODELOS Y SIMULACIÓN,FALSE
+solo_archivo,,,,,ORGANIZACIÓN DE DATOS,FALSE
+solo_archivo,,,,,ORGANIZACIÓN Y DIRECCIÓN INDUSTRIAL (ALIAS 1),FALSE
+solo_archivo,,,,,ORGANIZACIÓN Y DIRECCIÓN INDUSTRIAL (ALIAS 2),FALSE
+solo_archivo,,,,,ORGANIZACIÓN Y DIRECCIÓN INDUSTRIAL I,FALSE
+solo_archivo,,,,,ORGANIZACIÓN Y DIRECCIÓN INDUSTRIAL II,FALSE
+solo_archivo,,,,,ORGANIZACIÓN Y DIRECCIÓN INDUSTRIAL III,FALSE
+solo_archivo,,,,,ORGANIZACIONES DESDE LA PERSPECTIVA DE LA PSICOLOGÍA SOCIAL I,TRUE
+solo_archivo,,,,,ORGANIZACIONES DESDE LA PERSPECTIVA DE LA PSICOLOGÍA SOCIAL II,TRUE
+solo_archivo,,,,,POLÍMEROS BIODEGRADABLES Y BIOCOMPUESTOS,FALSE
+solo_archivo,,,,,PRINCIPIOS DE CONVERSIÓN DE ENERGÍA,TRUE
+solo_archivo,,,,,PRINCIPIOS DE DISEÑO VLSI,FALSE
+solo_archivo,,,,,PROBABILIDAD Y PROCESOS ESTOCÁSTICOS,FALSE
+solo_archivo,,,,,PROCESAMIENTO DE POLÍMEROS,FALSE
+solo_archivo,,,,,PROCESOS BIOTECNOLÓGICOS,FALSE
+solo_archivo,,,,,PROCESOS INDUSTRIALES I,FALSE
+solo_archivo,,,,,PROGRAMACIÓN DE ELEMENTOS FINITOS,TRUE
+solo_archivo,,,,,PROGRAMACIÓN ESTRUCTURADA,FALSE
+solo_archivo,,,,,PROGRAMACIÓN I,FALSE
+solo_archivo,,,,,PROGRAMACIÓN III,FALSE
+solo_archivo,,,,,PROGRAMACIÓN ORIENTADA A OBJETOS,FALSE
+solo_archivo,,,,,PROPIEDADES ESTRUCTURALES I,FALSE
+solo_archivo,,,,,PROTOTIPOS MECÁNICOS VIRTUALES,FALSE
+solo_archivo,,,,,PROYECTO DE INGENIERIA INDUSTRIAL I,FALSE
+solo_archivo,,,,,PROYECTO TRANSVERSAL I,FALSE
+solo_archivo,,,,,PROYECTO TRANSVERSAL III,FALSE
+solo_archivo,,,,,QUÍMICA ANALÍTICA,FALSE
+solo_archivo,,,,,QUÍMICA DE LOS MATERIALES,FALSE
+solo_archivo,,,,,QUÍMICA DEL SÓLIDO,FALSE
+solo_archivo,,,,,QUÍMICA FÍSICA,FALSE
+solo_archivo,,,,,QUÍMICA GENERAL I,FALSE
+solo_archivo,,,,,QUÍMICA GENERAL II,FALSE
+solo_archivo,,,,,QUÍMICA INORGÁNICA,FALSE
+solo_archivo,,,,,QUÍMICA MACROMOLECULAR,FALSE
+solo_archivo,,,,,QUÍMICA ORGÁNICA,FALSE
+solo_archivo,,,,,REACTORES BIOLÓGICOS,TRUE
+solo_archivo,,,,,REDES DE TRANSMISIÓN DE DATOS,FALSE
+solo_archivo,,,,,ROBÓTICA APLICADA,FALSE
+solo_archivo,,,,,SEGURIDAD EN SISTEMAS,FALSE
+solo_archivo,,,,,"SEGURIDAD, HIGIENE Y SANEAMIENTO AMBIENTAL",FALSE
+solo_archivo,,,,,SEÑALES Y SISTEMAS,FALSE
+solo_archivo,,,,,SERVICIOS DE RED BASADOS EN SOFTWARE LIBRE,FALSE
+solo_archivo,,,,,SIMULACIÓN DE PROCESOS QUÍMICOS,TRUE
+solo_archivo,,,,,SISTEMAS CAD,FALSE
+solo_archivo,,,,,SISTEMAS DE COMPUTACIÓN DISTRIBUIDOS I,FALSE
+solo_archivo,,,,,SISTEMAS DE COMUNICACIONES BASADOS EN RADIO DEFINIDA POR SOFTWARE,FALSE
+solo_archivo,,,,,SISTEMAS DE REPRESENTACIÓN,FALSE
+solo_archivo,,,,,SISTEMAS DE REPRESENTACIÓN EN PLANTAS DE PROCESOS,FALSE
+solo_archivo,,,,,SISTEMAS DIGITALES,FALSE
+solo_archivo,,,,,SISTEMAS ENERGÉTICOS INNOVATIVOS,TRUE
+solo_archivo,,,,,SISTEMAS OPERATIVOS,FALSE
+solo_archivo,,,,,SOLDADURA,FALSE
+solo_archivo,,,,,TALLER DE PROGRAMACIÓN I,FALSE
+solo_archivo,,,,,TALLER DE PROGRAMACIÓN II,FALSE
+solo_archivo,,,,,TÉCNICAS Y DISPOSITIVOS DIGITALES I,FALSE
+solo_archivo,,,,,TÉCNICAS Y DISPOSITIVOS DIGITALES II,FALSE
+solo_archivo,,,,,TECNOLOGÍA DE LA FUNDICIÓN,FALSE
+solo_archivo,,,,,TECNOLOGÍA DE LOS MATERIALES,FALSE
+solo_archivo,,,,,TECNOLOGÍA MECÁNICA I,FALSE
+solo_archivo,,,,,TECNOLOGÍAS INFORMÁTICAS A,FALSE
+solo_archivo,,,,,TECNOLOGÍAS INFORMÁTICAS B,FALSE
+solo_archivo,,,,,TELEDETECCIÓN Y SISTEMAS DE INFORMACIÓN GEOGRÁFICOS,FALSE
+solo_archivo,,,,,TEORÍA DE CIRCUITOS,FALSE
+solo_archivo,,,,,TEORÍA DE CONTROL,FALSE
+solo_archivo,,,,,TEORÍA DE REDES,FALSE
+solo_archivo,,,,,TEORÍA DE REDES I,FALSE
+solo_archivo,,,,,TEORÍA DE REDES II,FALSE
+solo_archivo,,,,,TEORÍA DE SEÑALES Y SISTEMAS LINEALES,FALSE
+solo_archivo,,,,,TEORÍAS DE LA INFORMACIÓN Y LA COMUNICACIÓN,FALSE
+solo_archivo,,,,,TERMODINÁMICA,FALSE
+solo_archivo,,,,,TERMODINÁMICA (para Ing. en Alimentos),FALSE
+solo_archivo,,,,,TERMODINÁMICA (para Ing. Quimica),FALSE
+solo_archivo,,,,,TERMODINÁMICA Y MÁQUINAS TÉRMICAS,FALSE
+solo_archivo,,,,,TRABAJO FINAL,FALSE
+solo_archivo,,,,,TRABAJO FINAL ING. ELECTROMECÁNICA,FALSE
+solo_archivo,,,,,TRABAJO FINAL ING. EN MATERIALES,FALSE
+solo_archivo,,,,,TRABAJO FINAL ING. INFORMÁTICA,FALSE
+solo_archivo,,,,,TRABAJO FINAL ING. MECÁNICA,FALSE
+solo_archivo,,,,,TRANSFERENCIA DE CALOR,FALSE
+solo_archivo,,,,,TRANSFERENCIA DE CANTIDAD DE MOVIMIENTO,FALSE
+solo_archivo,,,,,TRANSFERENCIA DE MASA EN ALIMENTOS,FALSE
+solo_archivo,,,,,TRANSFORMADORES: SU CÁLCULO Y CONSTRUCCIÓN,FALSE
+solo_archivo,,,,,TRIBOLOGÍA,FALSE
+solo_archivo,,,,,VEHÍCULOS AUTOMOTORES,FALSE
