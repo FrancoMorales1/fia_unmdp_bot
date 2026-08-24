@@ -38,6 +38,12 @@ export const cursadas = pgTable(
     materia: text('materia').notNull(),
     /** El título crudo de MRBS, por si la normalización se comió algo. */
     tituloCrudo: text('titulo_crudo').notNull(),
+    /**
+     * Nombre de la cursada tal como lo ve el alumno en el campus virtual
+     * (mapeo estático en @fi/scrapper, ver mapping/README.md). Nulo cuando
+     * `materia` no matcheó contra ese catálogo.
+     */
+    nombreCampus: text('nombre_campus'),
     tipo: tipoClase('tipo').notNull(),
     /** Comisión declarada en el título: "A1", "A2", "TM"… */
     comision: text('comision'),

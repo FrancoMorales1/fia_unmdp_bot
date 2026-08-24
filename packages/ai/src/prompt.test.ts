@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import {
   construirPrompt,
   construirPromptDeMateria,
+  extraerBloqueLiteral,
   extraerFuentes,
   MAX_CARACTERES_POR_DOCUMENTO,
   partesDeArchivos,
@@ -57,6 +58,23 @@ describe('construirPrompt', () => {
 
     expect(prompt).not.toContain('x'.repeat(MAX_CARACTERES_POR_DOCUMENTO + 1));
     expect(prompt).toContain('x'.repeat(MAX_CARACTERES_POR_DOCUMENTO));
+  });
+
+  it('avisa que el bloqueLiteral no lo tiene que repetir, y no lo manda en el prompt', () => {
+    const prompt = construirPrompt({
+      ...consultaBase,
+      documentos: [
+        {
+          titulo: 'Horarios de "algebra 1a"',
+          url: 'https://salas.fi.mdp.edu.ar/',
+          contenido: 'Se encontraron 3 clases.',
+          bloqueLiteral: 'algebra 1A (T) — lunes 2026-08-24, de 10:00 a 12:00, en Aula 01',
+        },
+      ],
+    });
+
+    expect(prompt).toContain('se agrega aparte');
+    expect(prompt).not.toContain('Aula 01');
   });
 
   it('avisa que el PDF va adjunto en vez de volcar el contenido de texto', () => {
@@ -116,6 +134,23 @@ describe('extraerFuentes', () => {
     ]);
 
     expect(fuentes).toEqual(['https://fi.mdp.edu.ar/x', 'https://fi.mdp.edu.ar/y']);
+  });
+});
+
+describe('extraerBloqueLiteral', () => {
+  it('junta los bloques literales de los documentos que traen uno', () => {
+    const bloque = extraerBloqueLiteral([
+      { titulo: 'a', url: 'https://x', contenido: '', bloqueLiteral: 'línea 1' },
+      { titulo: 'b', url: 'https://x', contenido: '', bloqueLiteral: 'línea 2' },
+    ]);
+
+    expect(bloque).toBe('línea 1\n\nlínea 2');
+  });
+
+  it('devuelve undefined si ningún documento trae uno', () => {
+    expect(
+      extraerBloqueLiteral([{ titulo: 'a', url: 'https://x', contenido: 'x' }]),
+    ).toBeUndefined();
   });
 });
 

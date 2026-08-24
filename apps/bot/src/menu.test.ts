@@ -194,13 +194,21 @@ describe('menuInicial', () => {
 });
 
 describe('opcionesDeMaterias', () => {
-  it('publica los nombres exactos y permite elegir por botón o número', () => {
+  it('muestra las etiquetas de campus, pero el round-trip usa el nombre de la base', () => {
     const materias = ['gest. de seg. informatica y seg. en sist', 'principios de seg. informatica'];
-    const salida = opcionesDeMaterias(materias);
+    const etiquetas = ['Gestión de Seguridad Informática', 'Electrónica'];
+    const salida = opcionesDeMaterias(materias, etiquetas);
 
-    expect(salida.opciones?.map((opcion) => opcion.etiqueta)).toEqual(materias);
+    expect(salida.opciones?.map((opcion) => opcion.etiqueta)).toEqual(etiquetas);
     expect(materiaElegida(entrante({ opcionElegida: 'materia:2' }), materias)).toBe(materias[1]);
     expect(materiaElegida(entrante({ texto: '1' }), materias)).toBe(materias[0]);
+  });
+
+  it('si no hay etiqueta de campus para una materia, muestra el nombre de la base', () => {
+    const materias = ['algebra 1a'];
+    const salida = opcionesDeMaterias(materias, []);
+
+    expect(salida.opciones?.map((opcion) => opcion.etiqueta)).toEqual(materias);
   });
 });
 

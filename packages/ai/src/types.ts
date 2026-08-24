@@ -11,6 +11,14 @@ export interface FragmentoContexto {
    * (no por cantidad de texto).
    */
   archivoPdf?: { datos: string; mimeType: string };
+  /**
+   * Texto armado directo de la base (día, hora, aula), para agregar tal cual
+   * después de lo que escriba el modelo — nunca se lo pasa como parte del
+   * prompt. Es la parte de la respuesta que no puede depender de que la IA
+   * transcriba bien un dato: se muestra siempre exactamente como está en la
+   * BBDD, sin pasar por el modelo.
+   */
+  bloqueLiteral?: string;
 }
 
 /** Todo lo que la IA necesita para responder: la consulta natural + contexto de la BBDD. */

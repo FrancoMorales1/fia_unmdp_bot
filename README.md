@@ -176,8 +176,8 @@ así que lo resuelve el modelo, en dos pasos:
    catálogo que corresponden, de la más probable a la menos, o la lista vacía si
    ninguna tiene que ver.
 2. **Buscar y responder.** Con ese nombre exacto se traen las clases de la base
-   (`WHERE materia = ANY(...)`) y esas clases —ahora sí con día, hora y aula—
-   son el contexto con el que el modelo arma la respuesta final.
+   (`WHERE materia = ANY(...)`) y esas clases son el contexto con el que el
+   modelo arma la respuesta final.
 
 El paso 1 no puede confiarse a ciegas: el modelo a veces "arregla" el nombre que
 le pidieron copiar (le pone acentos, expande una abreviatura). Por eso
@@ -191,6 +191,19 @@ Si el modelo no reconoce nada queda una red de contención determinista —
 materia tal cual no dependa de que la IA acierte. Y si tampoco eso encuentra,
 el fragmento sale marcado `SIN COINCIDENCIAS` con el catálogo entero, así la
 respuesta final puede sugerir lo más parecido en vez de cortar la conversación.
+
+**El día, la hora y el aula nunca los escribe el modelo.** En el paso 2, el
+listado de clases (`describir()` en
+[`contexto.ts`](apps/bot/src/contexto.ts)) no viaja como texto libre: va aparte,
+en `FragmentoContexto.bloqueLiteral`, y ese campo nunca se manda como parte del
+prompt (`renderDocumentos` en [`prompt.ts`](packages/ai/src/prompt.ts) lo
+excluye a propósito). Al modelo solo le llega la metadata —qué materia se
+encontró, cuántas clases hay— con la instrucción de escribir nada más que una
+introducción breve. [`formatearRespuesta`](apps/bot/src/respuesta.ts) arma el
+mensaje final pegando esa introducción con el bloque literal tal cual salió de
+la base, y si hay que recortar por el límite de WhatsApp/Telegram, lo que se
+acorta es la introducción — el bloque literal nunca se corta a la mitad de un
+renglón, así nunca puede quedar un horario, día o aula truncado o inventado.
 
 ### Calendario, planes de estudio e información de la facultad: archivo directo
 

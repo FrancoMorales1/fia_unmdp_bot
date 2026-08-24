@@ -1,0 +1,1 @@
+ALTER TABLE "cursadas" ADD COLUMN "nombre_campus" text;

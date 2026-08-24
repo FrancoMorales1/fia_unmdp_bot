@@ -2,6 +2,7 @@ export { crearProveedorGemini } from './gemini.js';
 export {
   construirPrompt,
   construirPromptDeMateria,
+  extraerBloqueLiteral,
   extraerFuentes,
   instruccionParaOpcion,
   INSTRUCCION_MATERIA,

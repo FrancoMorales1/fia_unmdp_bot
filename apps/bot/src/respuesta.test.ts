@@ -44,3 +44,42 @@ describe('formatearRespuesta', () => {
     expect(salida).toContain('_Fuentes:_');
   });
 });
+
+describe('formatearRespuesta con bloqueLiteral', () => {
+  const bloque =
+    '*Horarios de "algebra 1a":*\n\nalgebra 1A (T) — lunes 2026-08-24, de 10:00 a 12:00, en Aula 01';
+
+  it('agrega el bloque literal tal cual después de la intro de la IA', () => {
+    const salida = formatearRespuesta(respuesta({ texto: 'Encontré esto:' }), bloque);
+
+    expect(salida).toContain('Encontré esto:');
+    expect(salida).toContain(bloque);
+  });
+
+  it('el bloque literal nunca se corta a la mitad de un renglón', () => {
+    const lineas = Array.from(
+      { length: 200 },
+      (_, i) => `Materia ${String(i)} — lunes 2026-08-24, de 10:00 a 12:00, en Aula ${String(i)}`,
+    );
+    const bloqueLargo = lineas.join('\n');
+
+    const salida = formatearRespuesta(respuesta({ texto: 'Encontré esto:' }), bloqueLargo);
+
+    expect(salida.length).toBeLessThanOrEqual(4000);
+    // Cada línea que sobrevive está entera: nunca aparece un renglón sin su
+    // "en Aula N" final.
+    for (const linea of salida.split('\n')) {
+      if (linea.startsWith('Materia')) expect(linea).toMatch(/en Aula \d+$/);
+    }
+  });
+
+  it('si el bloque literal ocupa casi todo el límite, recorta la intro de la IA, no el bloque', () => {
+    const bloqueLargo = 'x'.repeat(3900);
+    const salida = formatearRespuesta(
+      respuesta({ texto: 'Una introducción bastante larga que no tiene que cortar el bloque.' }),
+      bloqueLargo,
+    );
+
+    expect(salida).toContain(bloqueLargo);
+  });
+});

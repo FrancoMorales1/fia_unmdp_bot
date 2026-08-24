@@ -116,12 +116,17 @@ export function planElegido(mensaje: MensajeEntrante, planes: string[] | null): 
     : null;
 }
 
-export function opcionesDeMaterias(materias: string[]): RespuestaSalida {
+/**
+ * `etiquetas` es lo que ve el alumno (nombre del campus); `materias` es lo
+ * que se manda de vuelta al elegir una opción (nombre tal como está en la
+ * base, necesario para la búsqueda). Van en el mismo orden.
+ */
+export function opcionesDeMaterias(materias: string[], etiquetas: string[]): RespuestaSalida {
   return {
     texto: TEXTO_MATERIAS_ENCONTRADAS,
     opciones: materias.map((materia, indice) => ({
       id: `${PREFIJO_MATERIA}${indice + 1}`,
-      etiqueta: materia,
+      etiqueta: etiquetas[indice] ?? materia,
       atajo: String(indice + 1),
     })),
   };

@@ -1,4 +1,4 @@
-import { crearProveedorGemini, instruccionParaOpcion } from '@fi/ai';
+import { crearProveedorGemini, extraerBloqueLiteral, instruccionParaOpcion } from '@fi/ai';
 import {
   createLogger,
   env,
@@ -257,7 +257,7 @@ async function responder(mensaje: MensajeEntrante, plataforma: string): Promise<
   const documentos = await obtenerContextoDeOpcion(intencion.numero, intencion.consulta, ia);
   if (!Array.isArray(documentos)) {
     recordarMaterias(mensaje.jid, documentos.materias);
-    return opcionesDeMaterias(documentos.materias);
+    return opcionesDeMaterias(documentos.materias, documentos.etiquetas);
   }
   olvidarMaterias(mensaje.jid);
   olvidarCarreras(mensaje.jid);
@@ -284,7 +284,7 @@ async function responder(mensaje: MensajeEntrante, plataforma: string): Promise<
   );
 
   return {
-    texto: formatearRespuesta(respuesta),
+    texto: formatearRespuesta(respuesta, extraerBloqueLiteral(documentos)),
     // Botones para saltar a otro tema sin volver al menú. En WhatsApp no se
     // muestran: repetir el menú entero abajo de cada respuesta es ruido.
     opciones: botonesDeSeguimiento(),

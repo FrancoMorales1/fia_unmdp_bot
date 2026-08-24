@@ -2,6 +2,8 @@ import { createLogger } from '@fi/core';
 import { cursadas, db, type NuevaCursada } from '@fi/db';
 import { inArray } from 'drizzle-orm';
 
+import { buscarNombreCampus } from './mapeoCampus.js';
+
 import type { ClaseScrapeada } from './types.js';
 
 const log = createLogger('scrapper:db');
@@ -15,6 +17,7 @@ function aFila(clase: ClaseScrapeada): NuevaCursada {
     horaFin: clase.horaFin,
     materia: clase.materia,
     tituloCrudo: clase.tituloCrudo,
+    nombreCampus: buscarNombreCampus(clase.materia) ?? null,
     tipo: clase.tipo,
     comision: clase.comision ?? null,
     aula: clase.aula,

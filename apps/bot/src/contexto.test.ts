@@ -2,6 +2,8 @@ import { readFile } from 'node:fs/promises';
 
 import { describe, expect, it, vi } from 'vitest';
 
+import type { ProveedorIA } from '@fi/ai';
+
 const execute = vi.fn<(...args: unknown[]) => Promise<{ rows: unknown[] }>>();
 
 vi.mock('@fi/db', () => ({
@@ -14,9 +16,31 @@ const {
   obtenerContenidoCalendario,
   obtenerContenidoFacultad,
   obtenerContenidoIngreso,
+  obtenerContextoDeOpcion,
   obtenerPlanDeEstudio,
   planesDeEstudio,
 } = await import('./contexto.js');
+
+function iaFalsa(materias: string[] = []): ProveedorIA {
+  return {
+    responder: vi.fn(),
+    identificarMaterias: vi.fn().mockResolvedValue(materias),
+  };
+}
+
+function filaCursada(materia: string) {
+  return {
+    fecha: '2026-08-24',
+    dia_semana: 1,
+    hora_inicio: '10:00:00',
+    hora_fin: '12:00:00',
+    materia,
+    titulo_crudo: `${materia} (T)`,
+    tipo: 'teoria',
+    comision: null,
+    aula: 'Aula 01',
+  };
+}
 
 describe('carrerasDePlanes', () => {
   it('devuelve las carreras que trae la consulta', async () => {
@@ -118,6 +142,72 @@ describe('obtenerContenidoIngreso', () => {
     const segunda = obtenerContenidoIngreso();
 
     expect(segunda).toBe(primera);
+  });
+});
+
+describe('obtenerContextoDeOpcion(1, …) — horarios', () => {
+  it('agenda sin filtro: el detalle día/hora/aula va en bloqueLiteral, no en lo que ve la IA', async () => {
+    execute
+      .mockResolvedValueOnce({ rows: [{ total: '2' }] }) // contarClases
+      .mockResolvedValueOnce({
+        rows: [filaCursada('algebra 1a'), filaCursada('bases de datos')],
+      }); // agenda
+
+    const documentos = await obtenerContextoDeOpcion(1, '', iaFalsa());
+    if (!Array.isArray(documentos)) throw new Error('esperaba fragmentos, no selección');
+    const [fragmento] = documentos;
+
+    expect(fragmento?.contenido).not.toContain('Aula 01');
+    expect(fragmento?.contenido).not.toMatch(/\d{2}:\d{2}/);
+    expect(fragmento?.bloqueLiteral).toContain('algebra 1a');
+    expect(fragmento?.bloqueLiteral).toContain('Aula 01');
+    expect(fragmento?.bloqueLiteral).toContain('10:00');
+  });
+
+  it('materia encontrada: el detalle día/hora/aula va en bloqueLiteral, no en lo que ve la IA', async () => {
+    execute
+      .mockResolvedValueOnce({ rows: [{ total: '5' }] }) // contarClases
+      .mockResolvedValueOnce({ rows: [{ materia: 'algebra 1a' }] }) // catalogoDeMaterias
+      .mockResolvedValueOnce({ rows: [filaCursada('algebra 1a')] }); // clasesDeMaterias
+
+    const documentos = await obtenerContextoDeOpcion(1, 'algebra', iaFalsa(['algebra 1a']));
+    if (!Array.isArray(documentos)) throw new Error('esperaba fragmentos, no selección');
+    const [fragmento] = documentos;
+
+    expect(fragmento?.contenido).not.toContain('Aula 01');
+    expect(fragmento?.contenido).not.toMatch(/\d{2}:\d{2}/);
+    expect(fragmento?.contenido).toContain('algebra 1a');
+    expect(fragmento?.bloqueLiteral).toContain('Aula 01');
+    expect(fragmento?.bloqueLiteral).toContain('10:00');
+  });
+
+  it('varias materias encontradas: la selección muestra el nombre de campus, no el de MRBS', async () => {
+    execute
+      .mockResolvedValueOnce({ rows: [{ total: '5' }] }) // contarClases
+      .mockResolvedValueOnce({
+        rows: [{ materia: 'bases de datos p' }, { materia: 'bases de datos t' }],
+      }) // catalogoDeMaterias
+      .mockResolvedValueOnce({
+        rows: [
+          { materia: 'bases de datos p', nombre_campus: 'Bases de Datos (Plan 2010)' },
+          { materia: 'bases de datos t', nombre_campus: 'Bases de Datos (Plan 2010)' },
+        ],
+      }); // etiquetasDeCampus
+
+    const seleccion = await obtenerContextoDeOpcion(
+      1,
+      'base de datos',
+      iaFalsa(['bases de datos p', 'bases de datos t']),
+    );
+
+    if (Array.isArray(seleccion)) throw new Error('esperaba selección, no fragmentos');
+    expect(seleccion.materias).toEqual(['bases de datos p', 'bases de datos t']);
+    // Las dos mapean al mismo nombre de campus: se desambiguan agregando el
+    // nombre de MRBS entre paréntesis, si no el alumno no podría elegir.
+    expect(seleccion.etiquetas).toEqual([
+      'Bases de Datos (Plan 2010) (bases de datos p)',
+      'Bases de Datos (Plan 2010) (bases de datos t)',
+    ]);
   });
 });
 

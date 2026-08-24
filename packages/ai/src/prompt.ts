@@ -16,7 +16,7 @@ Reglas:
 
 /** Instrucción de dominio específica para cada opción del menú. */
 export const INSTRUCCION_POR_OPCION = {
-  1: 'Respondés sobre horarios de cursadas. Cuando des un horario, incluí siempre día, hora y aula.',
+  1: 'Respondés sobre horarios de cursadas. El detalle día/hora/aula NO lo escribís vos: se arma aparte, directo de la base, y se agrega después de tu texto tal cual está. Tu parte es solo la introducción — decí qué se encontró (o no) en dos o tres líneas como mucho, sin inventar ni repetir ningún horario, día o aula.',
   2: 'Respondés sobre el calendario académico 2026: fechas de inscripción, períodos de exámenes, feriados y plazos administrativos.',
   3: 'Respondés sobre planes de estudio: asignaturas, correlativas, créditos y requisitos de egreso de cada carrera.',
   4: 'Respondés sobre infraestructura, grupos de WhatsApp, enlaces y contactos de la facultad.',
@@ -87,7 +87,10 @@ function renderDocumentos(documentos: FragmentoContexto[]): string {
         );
       }
       const contenido = doc.contenido.slice(0, MAX_CARACTERES_POR_DOCUMENTO);
-      return `[${String(i + 1)}] ${doc.titulo}\nFuente: ${doc.url}\n${contenido}`;
+      const aviso = doc.bloqueLiteral
+        ? '\n(El detalle día/hora/aula de esto se agrega aparte, después de tu respuesta: no lo repitas ni lo completes vos.)'
+        : '';
+      return `[${String(i + 1)}] ${doc.titulo}\nFuente: ${doc.url}\n${contenido}${aviso}`;
     })
     .join('\n\n---\n\n');
 }
@@ -129,4 +132,14 @@ export function partesDeArchivos(documentos: FragmentoContexto[]): ParteDeArchiv
 
 export function extraerFuentes(documentos: FragmentoContexto[]): string[] {
   return [...new Set(documentos.map((doc) => doc.url))];
+}
+
+/**
+ * Junta los bloques literales (día/hora/aula armados directo de la base) de
+ * todos los documentos, en el mismo orden. `undefined` si ninguno trae uno,
+ * para no agregar separadores de más en la respuesta final.
+ */
+export function extraerBloqueLiteral(documentos: FragmentoContexto[]): string | undefined {
+  const bloques = documentos.map((doc) => doc.bloqueLiteral).filter((b) => b !== undefined);
+  return bloques.length > 0 ? bloques.join('\n\n') : undefined;
 }

@@ -33,6 +33,10 @@ sessions/
 downloads/
 tmp/
 
+# insumos crudos del mapping aulario↔campus (PDF/CSV de origen, no se publican)
+mapping/insumos/
+mapping/__pycache__/
+
 # editores / SO
 .DS_Store
 Thumbs.db

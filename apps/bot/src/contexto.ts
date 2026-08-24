@@ -64,7 +64,15 @@ interface FilaCursada extends Record<string, unknown> {
 
 export interface SeleccionDeMaterias {
   tipo: 'seleccion-materias';
+  /** Nombre tal como está en la base: es lo que hay que mandar de vuelta al elegir una opción. */
   materias: string[];
+  /**
+   * Nombre para mostrarle al alumno, en el mismo orden que `materias`: el del
+   * campus virtual cuando hay uno mapeado, o el de la base si no lo hay. Un
+   * alumno no elige entre "bases de datos p" y "bases de datos t" del sistema
+   * de salas — elige entre las materias que conoce del campus.
+   */
+  etiquetas: string[];
 }
 
 const ETIQUETA_TIPO: Record<string, string> = {
@@ -156,6 +164,33 @@ async function catalogoDeMaterias(desde: string, hasta: string): Promise<string[
 }
 
 /**
+ * Etiqueta para mostrarle al alumno: el nombre del campus si esa materia lo
+ * tiene mapeado, o el nombre tal como está en la base si no lo tiene. En el
+ * mismo orden que `materias`.
+ *
+ * Distintas materias de MRBS (teoría/práctica, comisiones, variantes de
+ * tipeo) suelen mapear al mismo nombre de campus. Si dos opciones quedaran
+ * con la misma etiqueta, el alumno no podría distinguir cuál elegir —así que
+ * a las que chocan se les agrega el nombre de la base entre paréntesis.
+ */
+async function etiquetasDeCampus(materias: string[]): Promise<string[]> {
+  if (materias.length === 0) return [];
+
+  const { rows } = await db.execute<{ materia: string; nombre_campus: string | null }>(sql`
+    SELECT DISTINCT materia, nombre_campus FROM cursadas WHERE materia = ANY(${arregloTexto(materias)})
+  `);
+  const porMateria = new Map(rows.map((fila) => [fila.materia, fila.nombre_campus]));
+  const etiquetas = materias.map((materia) => porMateria.get(materia) ?? materia);
+
+  const repetidas = new Map<string, number>();
+  for (const etiqueta of etiquetas) repetidas.set(etiqueta, (repetidas.get(etiqueta) ?? 0) + 1);
+
+  return etiquetas.map((etiqueta, i) =>
+    (repetidas.get(etiqueta) ?? 0) > 1 ? `${etiqueta} (${materias[i]})` : etiqueta,
+  );
+}
+
+/**
  * Busca horarios en dos pasos, porque emparejar lo que escribe un alumno con el
  * nombre real de una materia es un problema de significado, no de texto:
  *
@@ -199,8 +234,10 @@ async function buscarHorarios(
         titulo: `Agenda de clases del ${hoy} al ${hastaCorto}`,
         url: FUENTE_SALAS,
         contenido:
-          'Clases de los próximos días. Hay más adelante en la semana: para verlas ' +
-          `hay que nombrar la materia.\n\n${filas.map(describir).join('\n')}`,
+          `Hay ${String(filas.length)} clases cargadas del ${hoy} al ${hastaCorto}. El ` +
+          'detalle día/hora/aula se agrega aparte, no lo repitas. Solo avisá que hay más ' +
+          'clases más adelante en la semana y que para verlas hay que nombrar la materia.',
+        bloqueLiteral: `*Agenda del ${hoy} al ${hastaCorto}:*\n\n${filas.map(describir).join('\n')}`,
       },
     ];
   }
@@ -211,7 +248,11 @@ async function buscarHorarios(
   const elegidas = validarContraCatalogo(propuestas, catalogo);
 
   if (elegidas.length > 1) {
-    return { tipo: 'seleccion-materias', materias: elegidas };
+    return {
+      tipo: 'seleccion-materias',
+      materias: elegidas,
+      etiquetas: await etiquetasDeCampus(elegidas),
+    };
   }
 
   // Paso 2: recién ahora se van a buscar las clases.
@@ -224,6 +265,7 @@ async function buscarHorarios(
     // Sale de las filas y no de `elegidas` para que también sirva cuando la que
     // encontró la materia fue la red de contención.
     const materias = [...new Set(filas.map((fila) => fila.materia))];
+    const materiasCitadas = materias.map((m) => `"${m}"`).join(' y ');
 
     return [
       {
@@ -231,9 +273,10 @@ async function buscarHorarios(
         url: FUENTE_SALAS,
         contenido:
           `El alumno escribió "${consulta}". En el sistema esa materia figura como ` +
-          `${materias.map((m) => `"${m}"`).join(' y ')}. Si el nombre no es el que usó ` +
-          `él, nombrásela completa al responder para que sepa cuál es.\n\n` +
-          filas.map(describir).join('\n'),
+          `${materiasCitadas}, con ${String(filas.length)} clases cargadas. Si el nombre ` +
+          'no es el que usó él, nombrásela completa al responder para que sepa cuál es. El ' +
+          'detalle día/hora/aula se agrega aparte: no lo repitas ni inventes horarios.',
+        bloqueLiteral: `*Horarios de ${materiasCitadas}:*\n\n${filas.map(describir).join('\n')}`,
       },
     ];
   }

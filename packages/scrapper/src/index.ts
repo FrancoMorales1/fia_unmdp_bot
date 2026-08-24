@@ -17,6 +17,7 @@ export { scrapearHorarios, construirUrl } from './mrbs.js';
 export { guardarHorarios } from './persistir.js';
 export { parsearDia, segundosAHora } from './parseo.js';
 export { parsearTitulo, normalizarMateria } from './titulo.js';
+export { buscarNombreCampus } from './mapeoCampus.js';
 export {
   fechaEnZona,
   sumarDias,
