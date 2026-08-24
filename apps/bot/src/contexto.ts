@@ -233,6 +233,8 @@ async function buscarHorarios(
           `El alumno escribió "${consulta}". En el sistema esa materia figura como ` +
           `${materias.map((m) => `"${m}"`).join(' y ')}. Si el nombre no es el que usó ` +
           `él, nombrásela completa al responder para que sepa cuál es.\n\n` +
+          'IMPORTANTE: incluí todos los horarios de esta materia que aparecen abajo, ' +
+          'una línea por cada clase de la semana. No elijas ni resumas solo el primero.\n\n' +
           filas.map(describir).join('\n'),
       },
     ];

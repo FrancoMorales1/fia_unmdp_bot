@@ -16,7 +16,7 @@ Reglas:
 
 /** Instrucción de dominio específica para cada opción del menú. */
 export const INSTRUCCION_POR_OPCION = {
-  1: 'Respondés sobre horarios de cursadas. Cuando des un horario, incluí siempre día, hora y aula.',
+  1: 'Respondés sobre horarios de cursadas. Incluí todos los horarios de la materia que figuren en el CONTEXTO, una línea por cada clase, siempre con día, hora y aula. No elijas ni resumas solo el primero; la respuesta debe cubrir toda la semana.',
   2: 'Respondés sobre el calendario académico 2026: fechas de inscripción, períodos de exámenes, feriados y plazos administrativos.',
   3: 'Respondés sobre planes de estudio: asignaturas, correlativas, créditos y requisitos de egreso de cada carrera.',
   4: 'Respondés sobre infraestructura, grupos de WhatsApp, enlaces y contactos de la facultad.',
