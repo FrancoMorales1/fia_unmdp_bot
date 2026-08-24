@@ -50,10 +50,12 @@ onlyBuiltDependencies:
 # Evita que un package use algo que no declaró en su package.json.
 nodeLinker: isolated
 
-# drizzle-kit no declara drizzle-orm/pg y en el linker aislado no los ve.
+# drizzle-kit no declara bien sus peers y en el linker aislado no los ve.
 # En pnpm 11 esto va acá, no en package.json#pnpm.
 packageExtensions:
   drizzle-kit:
     peerDependencies:
       drizzle-orm: '*'
       pg: '*'
+      esbuild: '*'
+      tsx: '*'

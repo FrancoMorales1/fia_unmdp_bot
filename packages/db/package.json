@@ -37,6 +37,7 @@
     "@types/pg": "catalog:",
     "drizzle-kit": "catalog:",
     "esbuild": "catalog:",
+    "tsx": "catalog:",
     "typescript": "catalog:",
     "vitest": "catalog:"
   }
